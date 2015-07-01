@@ -38,7 +38,11 @@ void Window::spi_send_btn_clicked()
 
 void Window::toggle_led(bool t)
 {
-
+	if (t == false) {
+		bcm2835_GPIO->GPCLR0.bits.GPIO26 = 1;
+	} else {
+		bcm2835_GPIO->GPSET0.bits.GPIO26 = 1;
+	}
 }
 
 
