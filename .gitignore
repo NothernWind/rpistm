@@ -1,0 +1,5 @@
+*.[oa]
+*~
+temp/
+spi_test
+*.pro.user
