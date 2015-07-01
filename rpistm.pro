@@ -6,5 +6,3 @@ SOURCES += \
     window.cpp \
     main.cpp \
     bcm2835.c
-
-QT += widgets
