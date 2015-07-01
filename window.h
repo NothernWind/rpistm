@@ -52,6 +52,7 @@ private:
 	int LED_Init(void) {
 		if (bcm2835_gpio_map() == -1) return -1;
 		bcm2835_GPIO->GPFSEL2.bits.FSELn6 = GPIO_FSEL_OUTPUT;
+		return 0;
 	}
 
 };
