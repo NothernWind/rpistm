@@ -98,3 +98,23 @@ unsigned char spi0_unidir_poll_transfer(unsigned char data)
 	bcm2835_SPI->CSR.bits.TA = 0;
 	return temp;
 }
+
+/*!
+ ********************************************************************
+ * brief
+ *
+ ********************************************************************
+ */
+void spi0_unidir_poll_block_transfer(
+	const char *out_block, char * in_block, int size)
+{
+	int i;
+	bcm2835_SPI->CSR.bits.TA = 1;
+
+	for (i = 0; i < size; i++) {
+		bcm2835_SPI->FIFO = out_block[i];
+		while (bcm2835_SPI->CSR.bits.DONE == 0);
+		in_block[i] = (unsigned char)(bcm2835_SPI->FIFO);
+	}
+	bcm2835_SPI->CSR.bits.TA = 0;
+}

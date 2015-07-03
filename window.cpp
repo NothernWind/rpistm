@@ -50,12 +50,17 @@ Window::~Window()
 	spi0_unidir_poll_deinit();
 }
 
+char in_data[4];
+char out_data[4] = {0xAA, 0xF0, 0xF1, 0xF2};
+
 void Window::spi_send_btn_clicked()
 {
 	printf("Send one byte to SPI0\n");
-	bcm2835_GPIO->GPCLR0 = GPIO_GPSET0_GP8;
-	unsigned char data = spi0_unidir_poll_transfer(0xAA);
-	bcm2835_GPIO->GPSET0 = GPIO_GPSET0_GP8;
+//	bcm2835_GPIO->GPCLR0 = GPIO_GPSET0_GP8;
+//	unsigned char data = spi0_unidir_poll_transfer(0xAA);
+//	bcm2835_GPIO->GPSET0 = GPIO_GPSET0_GP8;
+
+	spi0_unidir_poll_block_transfer(out_data, in_data, 4);
 
 	spi_data_label->setText(QString("SPI Data In: 0x%1")
 		.arg(data, 2, 16, QLatin1Char('0')));
