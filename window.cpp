@@ -37,7 +37,7 @@ Window::Window(QWidget *parent)
 		this, SLOT(toggle_led(bool)));
 
 	connect(spi_send_btn, SIGNAL(clicked()),
-		this, SLOT(spi_send_btn_clicked());
+		this, SLOT(spi_send_btn_clicked()));
 
 }
 

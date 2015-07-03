@@ -66,7 +66,7 @@ int spi0_unidir_poll_init(int ckdiv, int flags)
 		"F(CK) = %f Hz;",
 		bcm2835_SPI->CSR.bits.CHPA,
 		bcm2835_SPI->CSR.bits.CPOL,
-		((double)250000000) / ((double)ckdiv);
+		((double)250000000) / ((double)ckdiv));
 	);
 
 	return 0;
@@ -79,8 +79,6 @@ void spi0_unidir_poll_deinit(void)
 	printf("Unmap SPI\n");
 	bcm2835_periph_unmap(&spi_dsc);
 }
-
-void spi0_unidir_dma_init(int speed, int flags){}
 
 /*!
  ********************************************************************
@@ -97,31 +95,5 @@ unsigned char spi0_unidir_poll_transfer(unsigned char data)
 	while (bcm2835_SPI->CSR.bits.DONE == 0);
 	temp = (unsigned char)(bcm2835_SPI->FIFO);
 	bcm2835_SPI->CSR.bits.TA = 0;
-	return temp;
-}
-
-void spi_unidir_poll_buffer(const char * out, char * in, int size){}
-
-/*!
- ********************************************************************
- * brief
- *
- ********************************************************************
- */
-unsigned short spi0_poll_read_EMS22A(void)
-{
-	unsigned short temp;
-	bcm2835_GPIO->GPCLR0.bits.GPIO8 = 1;
-	
-	bcm2835_SPI->CSR.bits.TA = 1;
-	bcm2835_SPI->FIFO = 0xFF;
-	while (bcm2835_SPI->CSR.bits.DONE == 0);
-	temp = ((unsigned short)bcm2835_SPI->FIFO) << 8;
-	bcm2835_SPI->FIFO = 0xFF;
-	while (bcm2835_SPI->CSR.bits.DONE == 0);
-	temp |= (unsigned short)bcm2835_SPI->FIFO;
-	bcm2835_SPI->CSR.bits.TA = 0;
-	
-	bcm2835_GPIO->GPSET0.bits.GPIO8 = 1;
 	return temp;
 }
