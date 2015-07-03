@@ -28,6 +28,8 @@
 #include "bcm2835/gpio.h"
 #include "bcm2835/spi0.h"
 
+#include "analogcontrol.h"
+
 class ADC_Dial;
 
 /*!
@@ -46,6 +48,7 @@ public:
 private slots:
 	void spi_send_btn_clicked(void);
 	void toggle_led(bool t);
+	void sl_changed(int value);
 
 private:
 	QGridLayout * grid;
@@ -54,6 +57,10 @@ private:
 	QCheckBox * led_box;
 	QPushButton * spi_send_btn;
 	QLabel * spi_data_label;
+	AnalogControl * ADC1_control;
+	AnalogControl * ADC2_control;
+	QSlider * slider;
+
 };
 
 /*!
