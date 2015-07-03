@@ -50,6 +50,9 @@ Window::~Window()
 void Window::spi_send_btn_clicked()
 {
 	printf("Send one byte to SPI0\n");
+	bcm2835_GPIO->GPCLR0.bits.GPIO8 = 1;
+	unsigned char data = spi0_unidir_poll_transfer(0xAA);
+	bcm2835_GPIO->GPSET0.bits.GPIO8 = 1;
 }
 
 void Window::toggle_led(bool t)
