@@ -66,8 +66,9 @@ int spi0_unidir_poll_init(int ckdiv, int flags)
 		"F(CK) = %f Hz;",
 		bcm2835_SPI->CSR.bits.CHPA,
 		bcm2835_SPI->CSR.bits.CPOL,
-		((double)250000000) / ((double)ckdiv));
+		((double)250000000) / ((double)ckdiv)
 	);
+
 
 	return 0;
 }
