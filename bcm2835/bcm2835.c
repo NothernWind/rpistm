@@ -20,44 +20,8 @@
 // Variables --------------------------------------------------------
 struct bcm2835_periph gpio_dsc = {BCM2835_PERIPH_BASE | GPIO_OFFSET};
 struct bcm2835_periph spi_dsc = {BCM2835_PERIPH_BASE | SPI_OFFSET};
-t_gpio * bcm2835_GPIO;
-t_spi * bcm2835_SPI;
 
-/*!
- ********************************************************************
- * \brief
- * 
- ********************************************************************
- */
-int bcm2835_gpio_map(void) 
-{
-	printf("Map GPIO\n");
-	if (bcm2835_periph_map(&gpio_dsc, BCM2835_PERIPH_BASE | GPIO_OFFSET) == -1) {
-		printf("Failed to map the physical GPIO registers into the virtual memory space.\n");
-		return -1;
-	}
-	bcm2835_GPIO = (t_gpio *)gpio_dsc.addr;
-	printf("Success\n");
-	return 0;
-}
 
-/*!
- ********************************************************************
- * \brief
- * 
- ********************************************************************
- */
-int bcm2835_spi0_map(void)
-{
-	printf("Map SPI0\n");
-	if (bcm2835_periph_map(&spi_dsc, BCM2835_PERIPH_BASE | SPI_OFFSET) == -1) {
-		printf("Failed to map the physical SPI registers into the virtual memory space.\n");
-		return -1;
-	}
-	bcm2835_SPI = (t_spi *)spi_dsc.addr;
-	printf("Success\n");
-	return 0;
-}
 
 /*!
  ********************************************************************

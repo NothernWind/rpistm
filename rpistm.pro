@@ -10,3 +10,5 @@ SOURCES += \
     bcm2835/bcm2835.c \
     bcm2835/gpio.c \
     bcm2835/spi0.c
+
+QT += widgets

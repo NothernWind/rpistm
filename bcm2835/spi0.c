@@ -13,8 +13,30 @@
  ********************************************************************
  */
 
+#include <stdio.h>
+
 #include "spi0.h"
 #include "bcm2835.h"
+
+t_spi * bcm2835_SPI;
+
+/*!
+ ********************************************************************
+ * \brief
+ *
+ ********************************************************************
+ */
+int bcm2835_spi0_map(void)
+{
+	printf("Map SPI0\n");
+	if (bcm2835_periph_map(&spi_dsc, BCM2835_PERIPH_BASE | SPI_OFFSET) == -1) {
+		printf("Failed to map the physical SPI registers into the virtual memory space.\n");
+		return -1;
+	}
+	bcm2835_SPI = (t_spi *)spi_dsc.addr;
+	printf("Success\n");
+	return 0;
+}
 
 /*!
  ********************************************************************
@@ -24,20 +46,10 @@
  */
 int spi0_unidir_poll_init(int ckdiv, int flags)
 {
-	if (bcm2835_gpio_map() == -1) return -1;
 	if (bcm2835_spi0_map() == -1) return -1;
 	
-	// Для начала настроим порты для SPI0
-	printf("Config GPIO Alternate function for SPI\n");
-	
-	bcm2835_GPIO->GPFSEL0.bits.FSELn9 = GPIO_FSEL_ALT0; // 21 GPIO9  SPI0_MISO
-	bcm2835_GPIO->GPFSEL1.bits.FSELn0 = GPIO_FSEL_ALT0; // 19 GPIO10 SPI0_MOSI
-	bcm2835_GPIO->GPFSEL1.bits.FSELn1 = GPIO_FSEL_ALT0; // 23 GPIO11 SPI_SCLK
-	
-	// А это Chip select GPIO8
-	bcm2835_GPIO->GPFSEL0.bits.FSELn8 = GPIO_FSEL_OUTPUT;
-	bcm2835_GPIO->GPSET0.bits.GPIO8 = 1;
-	
+	printf("Configure SPI:\n");
+
 	if (flags & SPI0_CHPA_BEGINN)
 		bcm2835_SPI->CSR.bits.CHPA = 1;
 
@@ -48,20 +60,22 @@ int spi0_unidir_poll_init(int ckdiv, int flags)
 	bcm2835_SPI->CLR = ckdiv;
 	bcm2835_SPI->CSR.bits.TE_EN = 1;
 	
+	printf(
+		"CHPA = %d;\n"
+		"CPOL = %d;\n"
+		"F(CK) = %f Hz;",
+		bcm2835_SPI->CSR.bits.CHPA,
+		bcm2835_SPI->CSR.bits.CPOL,
+		((double)250000000) / ((double)ckdiv);
+	);
+
 	return 0;
 }
 
 void spi0_unidir_poll_deinit(void)
 {
 	printf("Deinit SPI\n");
-
-	bcm2835_GPIO->GPFSEL0.bits.FSELn9 = GPIO_FSEL_INPUT; // 21 GPIO9  SPI0_MISO
-	bcm2835_GPIO->GPFSEL1.bits.FSELn0 = GPIO_FSEL_INPUT; // 19 GPIO10 SPI0_MOSI
-	bcm2835_GPIO->GPFSEL1.bits.FSELn1 = GPIO_FSEL_INPUT; // 23 GPIO11 SPI_SCLK
 	bcm2835_SPI->CSR.all = 0;
-
-	printf("Unmap GPIO\n");
-	bcm2835_periph_unmap(&gpio_dsc);
 	printf("Unmap SPI\n");
 	bcm2835_periph_unmap(&spi_dsc);
 }

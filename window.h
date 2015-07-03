@@ -22,7 +22,9 @@
 #include <QDial>
 #include <QSpinBox>
 
-#include "bcm2835.h"
+#include "bcm2835/bcm2835.h"
+#include "bcm2835/gpio.h"
+#include "bcm2835/spi0.h"
 
 class ADC_Dial;
 
@@ -37,6 +39,7 @@ class Window : public QWidget
 	Q_OBJECT
 public:
 	explicit Window(QWidget *parent = 0);
+	~Window();
 
 private slots:
 	void spi_send_btn_clicked(void);
@@ -48,6 +51,7 @@ private:
 	ADC_Dial *ADC2_dial;
 	QCheckBox * led_box;
 	QPushButton * spi_send_btn;
+
 
 	int LED_Init(void) {
 		if (bcm2835_gpio_map() == -1) return -1;
