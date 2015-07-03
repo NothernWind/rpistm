@@ -185,11 +185,11 @@ typedef struct _t_gpio {
 	volatile t_gpsn GPFSEL4;
 	volatile t_gpsn GPFSEL5;
 	volatile unsigned int r1;
-	volatile t_gp0 GPSET0;
-	volatile t_gp1 GPSET1;
+	volatile unsigned int GPSET0;
+	volatile unsigned int GPSET1;
 	volatile unsigned int r2;
-	volatile t_gp0 GPCLR0;
-	volatile t_gp1 GPCLR1;
+	volatile unsigned int GPCLR0;
+	volatile unsigned int GPCLR1;
 	volatile unsigned int r3;
 	volatile t_gp0 GPLEV0;
 	volatile t_gp1 GPLEV1;
