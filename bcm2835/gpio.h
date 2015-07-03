@@ -158,7 +158,7 @@ typedef struct _t_gpio {
 extern t_gpio * bcm2835_GPIO;
 
 int gpio_init(void);
-int gpio_deinit(void);
+void gpio_deinit(void);
 
 #ifdef __cplusplus
 }

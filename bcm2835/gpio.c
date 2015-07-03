@@ -57,7 +57,7 @@ int gpio_init(void)
 	return 0;
 }
 
-int gpio_deinit(void)
+void gpio_deinit(void)
 {
 	printf("Deinit GPIO\n");
 	bcm2835_GPIO->GPFSEL0.bits.FSELn9 = GPIO_FSEL_INPUT; // 21 GPIO9  SPI0_MISO
