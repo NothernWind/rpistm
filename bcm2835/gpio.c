@@ -51,6 +51,9 @@ int gpio_init(void)
 
 	bcm2835_GPIO->GPFSEL2.bits.FSELn5 = GPIO_FSEL_OUTPUT;
 	bcm2835_GPIO->GPSET0.bits.GPIO25 = 1;
+
+	bcm2835_GPIO->GPFSEL2.bits.FSELn6 = GPIO_FSEL_OUTPUT;
+
 	return 0;
 }
 

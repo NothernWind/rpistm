@@ -26,7 +26,12 @@ Window::Window(QWidget *parent)
 	adjustSize();
 	setFixedSize(this->size());
 
-	if (LED_Init() == -1) return;
+	if (gpio_init() == -1) return;
+	if (spi0_unidir_poll_init(250,
+		SPI0_CHPA_BEGINN | SPI0_CPOL_HIGH) == -1) return;
+
+	spi_send_btn->setDisabled(false);
+	led_box->setDisabled(false);
 
 	connect(led_box, SIGNAL(toggled(bool)),
 		this, SLOT(toggle_led(bool)));
@@ -34,13 +39,6 @@ Window::Window(QWidget *parent)
 	connect(spi_send_btn, SIGNAL(clicked()),
 		this, SLOT(spi_send_btn_clicked());
 
-	led_box->setDisabled(false);
-
-	if (gpio_init() == -1) return;
-	if (spi0_unidir_poll_init(250,
-		SPI0_CHPA_BEGINN | SPI0_CPOL_HIGH) == -1) return;
-
-	spi_send_btn->setDisabled(false);
 }
 
 Window::~Window()
