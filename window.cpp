@@ -36,7 +36,7 @@ Window::Window(QWidget *parent)
 
 	led_box->setDisabled(false);
 
-	if (config_gpio_for_spi() == -1) return;
+	if (gpio_init() == -1) return;
 	if (spi0_unidir_poll_init(250,
 		SPI0_CHPA_BEGINN | SPI0_CPOL_HIGH) == -1) return;
 
@@ -45,13 +45,13 @@ Window::Window(QWidget *parent)
 
 Window::~Window()
 {
-	deinit_gpio_for_spi();
+	gpio_deinit();
 	spi0_unidir_poll_deinit();
 }
 
 void Window::spi_send_btn_clicked()
 {
-
+	printf("Send one byte to SPI0\n");
 }
 
 void Window::toggle_led(bool t)
