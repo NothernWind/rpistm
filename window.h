@@ -22,6 +22,8 @@
 #include <QDial>
 #include <QSpinBox>
 
+#include <stdio.h>
+
 #include "bcm2835/bcm2835.h"
 #include "bcm2835/gpio.h"
 #include "bcm2835/spi0.h"

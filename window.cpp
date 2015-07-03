@@ -14,7 +14,7 @@ Window::Window(QWidget *parent)
 	grid->addWidget(ADC1_dial, 1, 0);
 	grid->addWidget(ADC2_dial, 1, 1);
 	grid->addWidget(led_box, 2, 0);
-	grid->addWidget(spi_send_btnб 3, 0);
+	grid->addWidget(spi_send_btn, 3, 0);
 
 	led_box->setDisabled(true);
 
