@@ -64,10 +64,10 @@ void Window::spi_send_btn_clicked()
 
 	spi0_unidir_poll_block_transfer(out_data, in_data, 4);
 	QString str;
-	str.append("Rx: ");
+	str.append("Rx:");
 
 	for (int i = 0; i < 4; i++) {
-		str.append(QString("0x%1")
+		str.append(QString(" 0x%1")
 			.arg(in_data[i], 2, 16, QLatin1Char('0')));
 	}
 	spi_data_label->setText(str);
