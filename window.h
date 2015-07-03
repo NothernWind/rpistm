@@ -53,6 +53,7 @@ private:
 	ADC_Dial *ADC2_dial;
 	QCheckBox * led_box;
 	QPushButton * spi_send_btn;
+	QLabel * spi_data_label;
 };
 
 /*!
