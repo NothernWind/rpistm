@@ -102,8 +102,11 @@ void Window::spi_send_btn_clicked()
 	spi_data_label->setText(QString("SPI Data In: 0x%1")
 		.arg(data, 2, 16, QLatin1Char('0')));
 #else
-	if (spi0_unidir_poll_block_transfer(out_data, in_data, 4) != 0) {
-		spi_data_label->setText("Data transfer error");
+	int error_code = spi0_unidir_poll_block_transfer(out_data, in_data, 4);
+	if (error_code != 0) {
+		printf("SPI Data Transfer Error: %d\n"
+			"Device not response\n", error_code);
+		return;
 	}
 	QString str;
 	str.append("Rx:");
