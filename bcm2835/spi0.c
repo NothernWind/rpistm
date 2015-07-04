@@ -18,6 +18,8 @@
 #include "spi0.h"
 #include "bcm2835.h"
 
+#include "gpio.h"
+
 t_spi * bcm2835_SPI;
 
 /*!
@@ -115,6 +117,8 @@ void spi0_unidir_poll_block_transfer(
 		bcm2835_SPI->FIFO = out_block[i];
 		while (bcm2835_SPI->CSR.bits.DONE == 0);
 		in_block[i] = (unsigned char)(bcm2835_SPI->FIFO);
+		while (bcm2835_GPIO->GPLEV0.bits.GPIO24 == 0);
+		while (bcm2835_GPIO->GPLEV0.bits.GPIO24 == 1);
 	}
 	bcm2835_SPI->CSR.bits.TA = 0;
 }
