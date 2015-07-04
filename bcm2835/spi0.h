@@ -78,7 +78,7 @@ extern t_spi * bcm2835_SPI;
 int spi0_unidir_poll_init(int ckdiv, int flags);
 void spi0_unidir_poll_deinit(void);
 unsigned char spi0_unidir_poll_transfer(unsigned char data);
-void spi0_unidir_poll_block_transfer(
+int spi0_unidir_poll_block_transfer(
 	const char *out_block, char * in_block, int size);
 
 #ifdef __cplusplus

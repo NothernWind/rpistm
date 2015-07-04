@@ -102,7 +102,9 @@ void Window::spi_send_btn_clicked()
 	spi_data_label->setText(QString("SPI Data In: 0x%1")
 		.arg(data, 2, 16, QLatin1Char('0')));
 #else
-	spi0_unidir_poll_block_transfer(out_data, in_data, 4);
+	if (spi0_unidir_poll_block_transfer(out_data, in_data, 4) != 0) {
+		spi_data_label->setText("Data transfer error");
+	}
 	QString str;
 	str.append("Rx:");
 
@@ -112,6 +114,7 @@ void Window::spi_send_btn_clicked()
 	}
 
 	spi_data_label->setText(str);
+
 #endif
 }
 
