@@ -58,7 +58,6 @@ private:
 	qreal range_min;
 	qreal range_max;
 	qreal in_value;
-
 	int center_diameter;
 
 	QColor arrow_color;
@@ -71,7 +70,6 @@ private:
 	QString c_name;
 
 	QPen pen;
-
 };
 
 #endif // DINPUT_H
