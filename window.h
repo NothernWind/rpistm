@@ -48,7 +48,7 @@ public:
 private slots:
 	void spi_send_btn_clicked(void);
 	void toggle_led(bool t);
-	void sl_changed(int value);
+//	void sl_changed(int value);
 
 private:
 	QGridLayout * grid;
@@ -59,7 +59,7 @@ private:
 	QLabel * spi_data_label;
 	AnalogControl * ADC1_control;
 	AnalogControl * ADC2_control;
-	QSlider * slider;
+//	QSlider * slider;
 
 };
 

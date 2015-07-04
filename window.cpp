@@ -20,7 +20,7 @@ Window::Window(QWidget *parent)
 	, spi_data_label(new QLabel(this))
 	, ADC1_control(new AnalogControl(this))
 	, ADC2_control(new AnalogControl(this))
-	, slider(new QSlider(Qt::Vertical, this))
+//	, slider(new QSlider(Qt::Vertical, this))
 {
 	setFont(QFont("Monospace", 10, -1, false));
 	setLayout(grid);
@@ -48,13 +48,13 @@ Window::Window(QWidget *parent)
 	grid->addWidget(led_box, 1, 0);
 	grid->addWidget(spi_send_btn, 1, 1);
 	grid->addWidget(spi_data_label, 2, 0, 1, 2);
-	grid->addWidget(slider, 0, 2, 2, 1);
+//	grid->addWidget(slider, 0, 2, 2, 1);
 
 	adjustSize();
 	setFixedSize(this->size());
 
-	connect(slider, SIGNAL(valueChanged(int)),
-		this, SLOT(sl_changed(int)));
+//	connect(slider, SIGNAL(valueChanged(int)),
+//		this, SLOT(sl_changed(int)));
 
 	if (gpio_init() == -1) return;
 	if (spi0_unidir_poll_init(250,
@@ -77,15 +77,17 @@ Window::~Window()
 	spi0_unidir_poll_deinit();
 }
 
-void Window::sl_changed(int value)
-{
-	ADC1_control->setrot((qreal)value);
-	ADC2_control->setrot((qreal)value);
-}
+//void Window::sl_changed(int value)
+//{
+//	ADC1_control->setrot((qreal)value);
+//	ADC2_control->setrot((qreal)value);
+//}
 
 //#define SINGLE_TRANSFER
 char in_data[4];
 char out_data[4] = {0xAA, 0xF0, 0xF1, 0xF2};
+unsigned short ADC_data[2];
+
 /*!
  ********************************************************************
  * brief
@@ -102,7 +104,7 @@ void Window::spi_send_btn_clicked()
 	spi_data_label->setText(QString("SPI Data In: 0x%1")
 		.arg(data, 2, 16, QLatin1Char('0')));
 #else
-	int error_code = spi0_unidir_poll_block_transfer(out_data, in_data, 4);
+	int error_code = spi0_unidir_poll_block_transfer(out_data, (char *)&ADC_data[0], 4);
 	if (error_code != 0) {
 		printf("SPI Data Transfer Error: %d\n"
 			"Device not response\n", error_code);
@@ -111,12 +113,15 @@ void Window::spi_send_btn_clicked()
 	QString str;
 	str.append("Rx:");
 
-	for (int i = 0; i < 4; i++) {
+	/*for (int i = 0; i < 2; i++) {
 		str.append(QString(" 0x%1")
-			.arg(in_data[i], 2, 16, QLatin1Char('0')));
+			.arg(ADC_data[i], 2, 16, QLatin1Char('0')));
 	}
 
 	spi_data_label->setText(str);
+	*/
+	ADC1_control->setrot((qreal)ADC_data[0]);
+	ADC2_control->setrot((qreal)ADC_data[1]);
 
 #endif
 }
