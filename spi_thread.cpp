@@ -66,7 +66,7 @@ void SPI_Thread::run()
 			emit spi_thread_stopped();
 			return;
 		}
-		emit SPI_Tread_DataRDY((qreal)ADC_data[0], (qreal)ADC_data[0]);
+		emit SPI_Tread_DataRDY((qreal)ADC_data[0], (qreal)ADC_data[1]);
 	}
 
 	printf("SPI Device Stopped\n");
