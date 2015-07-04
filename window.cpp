@@ -25,7 +25,7 @@ Window::Window(QWidget *parent)
 	setFont(QFont("Monospace", 10, -1, false));
 	setLayout(grid);
 
-	slider->setRange(0, 4096.000);
+//	slider->setRange(0, 4096.000);
 	ADC1_control->setRange(0, 5000.000);
 	ADC1_control->setTitle("ADC1");
 
