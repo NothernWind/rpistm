@@ -50,9 +50,13 @@ void SPI_Thread::run()
 			if (spi_wait_timeout >= 1000000) {
 				spi_wait_timeout = 0;
 				printf("SPI Device Timeout error\n");
-				thread_state = false;
-				emit spi_thread_stopped();
-				return;
+				printf("Tryin to reset\n");
+				reset_spi_device();
+				continue;
+
+				//thread_state = false;
+				//emit spi_thread_stopped();
+				//return;
 			}
 		}
 
@@ -62,9 +66,13 @@ void SPI_Thread::run()
 		if (error_code != 0) {
 			printf("SPI Data Transfer Error: %d\n"
 				"Device not response\n", error_code);
-			thread_state = false;
-			emit spi_thread_stopped();
-			return;
+
+			printf("Tryin to reset\n");
+			reset_spi_device();
+			continue;
+			//thread_state = false;
+			//emit spi_thread_stopped();
+			//return;
 		}
 		emit SPI_Tread_DataRDY((qreal)ADC_data[0], (qreal)ADC_data[1]);
 	}
@@ -88,24 +96,15 @@ int SPI_Thread::SPI_Thread_Init()
 	if (spi0_unidir_poll_init(250,
 		SPI0_CHPA_BEGINN | SPI0_CPOL_HIGH) == -1) return -2;
 
-	printf("Reset the Device\n");
-	bcm2835_GPIO->GPCLR0 = GPIO_GPCLR0_GP25;
-
-	while (i--);
-	bcm2835_GPIO->GPSET0 = GPIO_GPSET0_GP25;
-
-	i = 0;
-
-	while (bcm2835_GPIO->GPLEV0.bits.GPIO24 == 1) {
-		i++;
-		if (i >= 1000000) {
-			i = 0;
-			return -3;
-		}
+	if (reset_spi_device() == -1) {
+		return -3;
 	}
+
 	printf("Device Ready!\n");
 	return 0;
 }
+
+
 
 /*!
  ********************************************************************
@@ -117,4 +116,35 @@ void SPI_Thread::SPI_Thread_DeInit()
 {
 	gpio_deinit();
 	spi0_unidir_poll_deinit();
+}
+
+/*!
+ ********************************************************************
+ * brief
+ *
+ ********************************************************************
+ */
+int SPI_Thread::reset_spi_device()
+{
+	int rst_timeout = 0;
+	int rst_wait = 10000;
+
+	printf("Reset the Device\n");
+
+	bcm2835_GPIO->GPCLR0 = GPIO_GPCLR0_GP25;
+	while (rst_wait--);
+	bcm2835_GPIO->GPSET0 = GPIO_GPSET0_GP25;
+
+	while (bcm2835_GPIO->GPLEV0.bits.GPIO24 == 1) {
+		rst_timeout++;
+		if (rst_timeout >= 1000000) {
+			rst_timeout = 0;
+			printf("Reset Timeout\n");
+			return -1;
+		}
+	}
+
+	printf("Device Ready!\n");
+
+	return 0;
 }

@@ -62,6 +62,8 @@ private:
 
 	unsigned short ADC_data[2];
 	char out_data[4];
+
+	int reset_spi_device(void);
 };
 
 #endif // SPI_THREAD_H
