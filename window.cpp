@@ -83,7 +83,7 @@ void Window::sl_changed(int value)
 	ADC2_control->setrot((qreal)value);
 }
 
-#define SINGLE_TRANSFER
+//#define SINGLE_TRANSFER
 char in_data[4];
 char out_data[4] = {0xAA, 0xF0, 0xF1, 0xF2};
 /*!
