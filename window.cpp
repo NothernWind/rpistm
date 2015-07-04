@@ -165,7 +165,7 @@ void Window::spi_start_btn_clicked()
 	if (start_state == false) {
 		spi_start_btn->setText("stop");
 		start_state = true;
-		spi_device->start();
+		spi_device->spi_thread_start();
 	} else {
 		spi_start_btn->setText("start");
 		start_state = false;
