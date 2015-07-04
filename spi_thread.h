@@ -50,8 +50,11 @@ public:
 		this->start();
 	}
 
+	bool get_thread_state(void) {return thread_state;}
+
 signals:
 	void SPI_Tread_DataRDY(qreal v1, qreal v2);
+	void spi_thread_stopped(void);
 
 private:
 	bool spi_state;

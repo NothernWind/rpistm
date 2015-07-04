@@ -75,8 +75,11 @@ Window::Window(QWidget *parent)
 	connect(spi_device, SIGNAL(SPI_Tread_DataRDY(qreal,qreal)),
 		this, SLOT(spi_device_value_rdy(qreal,qreal)));
 
-//	connect(spi_send_btn, SIGNAL(clicked()),
-//		this, SLOT(spi_send_btn_clicked()));
+	connect(spi_start_btn, SIGNAL(clicked()),
+		this, SLOT(spi_start_btn_clicked()));
+
+	connect(spi_device, SIGNAL(spi_thread_stopped()),
+		this, SLOT(spi_dev_stopped()));
 
 }
 
@@ -180,6 +183,12 @@ void Window::spi_device_value_rdy(qreal v1, qreal v2)
 {
 	ADC1_control->setrot(v1);
 	ADC2_control->setrot(v2);
+}
+
+void Window::spi_dev_stopped()
+{
+	spi_start_btn->setText("start");
+	start_state = false;
 }
 
 

@@ -51,6 +51,7 @@ void SPI_Thread::run()
 				spi_wait_timeout = 0;
 				printf("SPI Device Timeout error\n");
 				thread_state = false;
+				emit spi_thread_stopped();
 				return;
 			}
 		}
@@ -62,12 +63,14 @@ void SPI_Thread::run()
 			printf("SPI Data Transfer Error: %d\n"
 				"Device not response\n", error_code);
 			thread_state = false;
+			emit spi_thread_stopped();
 			return;
 		}
 		emit SPI_Tread_DataRDY((qreal)ADC_data[0], (qreal)ADC_data[0]);
 	}
 
 	printf("SPI Device Stopped\n");
+	emit spi_thread_stopped();
 }
 
 /*!

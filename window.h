@@ -56,6 +56,8 @@ private slots:
 
 	void spi_device_value_rdy(qreal, qreal);
 
+	void spi_dev_stopped(void);
+
 private:
 	bool start_state;
 
