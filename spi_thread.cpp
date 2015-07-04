@@ -56,7 +56,7 @@ void SPI_Thread::run()
 		}
 
 		error_code = spi0_unidir_poll_block_transfer(
-			out_data, (char *)(&ADC_data[0]));
+			(const char *)(&out_data[0]), (char *)(&ADC_data[0]), 4);
 
 		if (error_code != 0) {
 			printf("SPI Data Transfer Error: %d\n"

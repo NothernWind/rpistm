@@ -58,7 +58,7 @@ private:
 	bool thread_state;
 
 	unsigned short ADC_data[2];
-	unsigned char out_data[4];
+	char out_data[4];
 };
 
 #endif // SPI_THREAD_H
