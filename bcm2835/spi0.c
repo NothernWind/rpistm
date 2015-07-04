@@ -107,18 +107,33 @@ unsigned char spi0_unidir_poll_transfer(unsigned char data)
  *
  ********************************************************************
  */
-void spi0_unidir_poll_block_transfer(
+int spi0_unidir_poll_block_transfer(
 	const char *out_block, char * in_block, int size)
 {
 	int i;
+	int wait_timeout = 0;
 	bcm2835_SPI->CSR.bits.TA = 1;
 
 	for (i = 0; i < size; i++) {
 		bcm2835_SPI->FIFO = out_block[i];
 		while (bcm2835_SPI->CSR.bits.DONE == 0);
 		in_block[i] = (unsigned char)(bcm2835_SPI->FIFO);
-		while (bcm2835_GPIO->GPLEV0.bits.GPIO24 == 0);
-		while (bcm2835_GPIO->GPLEV0.bits.GPIO24 == 1);
+		while (bcm2835_GPIO->GPLEV0.bits.GPIO24 == 0) {
+			wait_timeout++;
+			if (wait_timeout > 100000) {
+				bcm2835_SPI->CSR.bits.TA = 0;
+				return -1;
+			}
+		}
+
+		while (bcm2835_GPIO->GPLEV0.bits.GPIO24 == 1) {
+			wait_timeout++;
+			if (wait_timeout > 100000) {
+				bcm2835_SPI->CSR.bits.TA = 0;
+				return -2;
+			}
+		}
 	}
 	bcm2835_SPI->CSR.bits.TA = 0;
+	return 0;
 }
