@@ -83,11 +83,12 @@ Window::Window(QWidget *parent)
 
 }
 
-//Window::~Window()
-//{
+Window::~Window()
+{
+	delete spi_device;
 //	gpio_deinit();
 //	spi0_unidir_poll_deinit();
-//}
+}
 
 //void Window::sl_changed(int value)
 //{
