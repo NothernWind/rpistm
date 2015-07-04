@@ -18,8 +18,8 @@
 #include <fcntl.h>
 
 // Variables --------------------------------------------------------
-struct bcm2835_periph gpio_dsc = {BCM2835_PERIPH_BASE | GPIO_OFFSET};
-struct bcm2835_periph spi_dsc = {BCM2835_PERIPH_BASE | SPI_OFFSET};
+struct bcm2835_periph gpio_dsc = {BCM2835_PERIPH_BASE | GPIO_OFFSET, 0, 0, 0};
+struct bcm2835_periph spi_dsc = {BCM2835_PERIPH_BASE | SPI_OFFSET, 0, 0, 0};
 
 /*!
  ********************************************************************

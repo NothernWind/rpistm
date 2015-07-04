@@ -83,6 +83,7 @@ void Window::sl_changed(int value)
 	ADC2_control->setrot((qreal)value);
 }
 
+#define SINGLE_TRANSFER
 char in_data[4];
 char out_data[4] = {0xAA, 0xF0, 0xF1, 0xF2};
 /*!
@@ -95,11 +96,12 @@ void Window::spi_send_btn_clicked()
 {
 	printf("Send one byte to SPI0\n");
 
-//	unsigned char data = spi0_unidir_poll_transfer(0xAA);
+#ifdef SINGLE_TRANSFER
+	unsigned char data = spi0_unidir_poll_transfer(0xAA);
 
-//	spi_data_label->setText(QString("SPI Data In: 0x%1")
-//		.arg(data, 2, 16, QLatin1Char('0')));
-
+	spi_data_label->setText(QString("SPI Data In: 0x%1")
+		.arg(data, 2, 16, QLatin1Char('0')));
+#else
 	spi0_unidir_poll_block_transfer(out_data, in_data, 4);
 	QString str;
 	str.append("Rx:");
@@ -108,7 +110,9 @@ void Window::spi_send_btn_clicked()
 		str.append(QString(" 0x%1")
 			.arg(in_data[i], 2, 16, QLatin1Char('0')));
 	}
+
 	spi_data_label->setText(str);
+#endif
 }
 
 /*!
