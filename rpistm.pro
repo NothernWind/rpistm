@@ -15,4 +15,4 @@ SOURCES += \
     analogcontrol.cpp \
     spi_thread.cpp
 
-#QT += widgets
+QT += widgets

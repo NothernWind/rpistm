@@ -24,11 +24,13 @@
 
 #include <stdio.h>
 
-#include "bcm2835/bcm2835.h"
-#include "bcm2835/gpio.h"
-#include "bcm2835/spi0.h"
+//#include "bcm2835/bcm2835.h"
+//#include "bcm2835/gpio.h"
+//#include "bcm2835/spi0.h"
 
 #include "analogcontrol.h"
+
+#include "spi_thread.h"
 
 class ADC_Dial;
 
@@ -43,22 +45,28 @@ class Window : public QWidget
 	Q_OBJECT
 public:
 	explicit Window(QWidget *parent = 0);
-	~Window();
+//	~Window();
 
 private slots:
-	void spi_send_btn_clicked(void);
+//	void spi_send_btn_clicked(void);
 	void toggle_led(bool t);
 //	void sl_changed(int value);
 
+	void spi_start_btn_clicked(void);
+
 private:
+	bool start_state;
+
 	QGridLayout * grid;
 	ADC_Dial * ADC1_dial;
 	ADC_Dial *ADC2_dial;
 	QCheckBox * led_box;
-	QPushButton * spi_send_btn;
+	QPushButton * spi_start_btn;
 	QLabel * spi_data_label;
 	AnalogControl * ADC1_control;
 	AnalogControl * ADC2_control;
+
+	SPI_Thread * spi_device;
 //	QSlider * slider;
 
 };
