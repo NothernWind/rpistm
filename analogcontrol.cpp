@@ -54,7 +54,6 @@ void AnalogControl::paintEvent(QPaintEvent */*event*/)
 		QPoint(-2, 44)
 	};
 
-
 // Основа
 	painter.setRenderHint(QPainter::Antialiasing, true);
 	painter.translate(50, 70);
@@ -79,6 +78,7 @@ void AnalogControl::paintEvent(QPaintEvent */*event*/)
 
 	painter.drawText(-20, 23, 40, 16, Qt::AlignCenter, "x1000");
 
+// Рисуем шкалу
 	QFont fnt;
 	fnt = QFont("Monospace", 12, -1, false);
 	fnt.setBold(true);
@@ -92,8 +92,6 @@ void AnalogControl::paintEvent(QPaintEvent */*event*/)
 	painter.drawText(15, -15, 16, 16, Qt::AlignRight, "4");
 	painter.drawText(14, 7, 16, 16, Qt::AlignRight, "5");
 
-
-// Рисуем шкалу
 	pen.setColor(scale_color);
 	pen.setWidth(2);
 	painter.setPen(pen);
@@ -105,7 +103,6 @@ void AnalogControl::paintEvent(QPaintEvent */*event*/)
 		if (i % 5 == 0)
 			painter.drawPolygon(points1, 3);
 		else painter.drawLine(0, 38, 0, 44);
-
 		painter.restore();
 	}
 
@@ -128,5 +125,4 @@ void AnalogControl::paintEvent(QPaintEvent */*event*/)
 
 // Ну и мелочь в виде закрывающего кружка
 	painter.drawEllipse(c_pos, c_pos, center_diameter, center_diameter);
-
 }

@@ -16,7 +16,7 @@ extern "C" {
 #endif
 
 // Defines ----------------------------------------------------------
-#define CPU_CORE_CLOCK	250000000
+#define CPU_CORE_CLOCK			250000000
 /*!
  ********************************************************************
  * Physical addresses range from 0x20000000 to 0x20FFFFFF for 
@@ -68,8 +68,6 @@ extern struct bcm2835_periph spi_dsc;
 // Public Prototypes ------------------------------------------------
 int bcm2835_periph_map(struct bcm2835_periph * pr, unsigned long addr) ;
 void bcm2835_periph_unmap(struct bcm2835_periph * pr);
-
-
 
 #ifdef __cplusplus
 }

@@ -37,13 +37,12 @@ int bcm2835_periph_map(struct bcm2835_periph * pr, unsigned long addr)
 	pr->paddr = addr;
 		
 	pr->map = mmap(
-		NULL, 
-		4096, 
+		NULL,
+		4096,
 		PROT_READ | PROT_WRITE,
 		MAP_SHARED,
-		pr->fd, 
-		pr->paddr
-	);
+		pr->fd,
+		pr->paddr);
 	
 	if (pr->map == MAP_FAILED) {
 		perror("mmap");
@@ -66,35 +65,3 @@ void bcm2835_periph_unmap(struct bcm2835_periph * pr)
 	munmap(pr->map, 4096);
 	close(pr->fd);
 }
-
-/*!
- ********************************************************************
- * \brief
- * 
- ********************************************************************
-
-int init_piriph(void) {
-	printf("Peripheral Initialization\n");
-	
-	if (periph_map(&gpio_dsc, BCM2835_PERIPH_BASE | GPIO_OFFSET) == -1) {
-		printf("Failed to map the physical GPIO registers into the virtual memory space.\n");
-		return -1;
-	} else printf("[ ok ] GPIO mapped\n");
-	
-	if (periph_map(&spi_dsc, BCM2835_PERIPH_BASE | SPI_OFFSET) == -1) {
-		printf("Failed to map the physical SPI registers into the virtual memory space.\n");
-		return -1;
-	} else printf("[ ok ] SPI mapped\n");
-	
-	bcm2835_GPIO = (t_gpio *)gpio_dsc.addr;
-	bcm2835_SPI = (t_spi *)spi_dsc.addr;
-	
-	printf("Config GPIO Alternate function for SPI\n");
-	
-	bcm2835_GPIO->GPFSEL0.bits.FSELn9 = GPIO_FSEL_ALT0; // 21 GPIO9  SPI0_MISO
-	bcm2835_GPIO->GPFSEL1.bits.FSELn0 = GPIO_FSEL_ALT0; // 19 GPIO10 SPI0_MOSI
-	bcm2835_GPIO->GPFSEL1.bits.FSELn1 = GPIO_FSEL_ALT0; // 23 GPIO11 SPI_SCLK	
-	
-	printf("Success\n");
-}
- */
