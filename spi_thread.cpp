@@ -74,8 +74,6 @@ void SPI_Thread::run()
  */
 int SPI_Thread::SPI_Thread_Init()
 {
-	int i = 1000000;
-
 	if (gpio_init() == -1) return -1;
 
 	if (spi0_unidir_poll_init(250,
