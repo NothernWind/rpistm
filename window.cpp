@@ -19,7 +19,7 @@ Window::Window(QWidget *parent)
 	, spi_data_label(new QLabel(this))
 	, ADC1_control(new AnalogControl(this))
 	, ADC2_control(new AnalogControl(this))
-	, single_transfer_btn(QPushButton("send", this))
+	, single_transfer_btn(new QPushButton("send", this))
 {
 	setFont(QFont("Monospace", 10, -1, false));
 	setLayout(grid);
@@ -142,11 +142,15 @@ unsigned short ADC_values[2];
 
 void Window::single_transfer_btn_clicked()
 {
+	GPIO_MARK1_SET
 	spi0_unidir_poll_block_transfer(
 		(const char *)(&spi_out_data[0]),
 		(char *)(&ADC_values[0]), 4
 		);
+	GPIO_MARK1_CLR
+
 	ADC1_control->setrot((qreal)ADC_values[0]);
 	ADC2_control->setrot((qreal)ADC_values[1]);
+
 
 }

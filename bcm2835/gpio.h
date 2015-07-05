@@ -91,6 +91,8 @@ extern "C" {
 #define GPIO_GPCLR0_GP30	0x40000000
 #define GPIO_GPCLR0_GP31	0x80000000
 
+#define GPIO_MARK1_CLR	bcm2835_GPIO->GPCLR0 = GPIO_GPCLR0_GP5;
+#define GPIO_MARK1_SET	bcm2835_GPIO->GPSET0 = GPIO_GPSET0_GP5;
 
 // Typedefs ---------------------------------------------------------
 typedef union _t_gpsn {
