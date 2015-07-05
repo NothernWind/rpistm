@@ -1,10 +1,10 @@
 /*!
  ********************************************************************
- * file
- * author	kaljan
- * version	0.0.0
- * date
- * brief
+ * \file	window.cpp
+ * \author	NothernWind
+ * \version	0.0.3
+ * \date	05.07.2015
+ * \brief
  *
  ********************************************************************
  */
@@ -31,7 +31,6 @@ Window::Window(QWidget *parent)
 	ADC2_control->setTitle("ADC2");
 
 	led_box->setDisabled(true);
-
 	spi_start_btn->setDisabled(true);
 	single_transfer_btn->setDisabled(true);
 
@@ -51,9 +50,11 @@ Window::Window(QWidget *parent)
 
 	if (spi_device->getState() == false) return;
 
+	single_transfer_btn->setDisabled(false);
 	spi_start_btn->setDisabled(false);
 	led_box->setDisabled(false);
-//	single_transfer_btn->setDisabled(false);
+
+	single_transfer_btn->setDisabled(false);
 
 	connect(led_box, SIGNAL(toggled(bool)),
 		this, SLOT(toggle_led(bool)));
@@ -64,11 +65,8 @@ Window::Window(QWidget *parent)
 	connect(spi_start_btn, SIGNAL(clicked()),
 		this, SLOT(spi_start_btn_clicked()));
 
-//	connect(spi_device, SIGNAL(spi_thread_stopped()),
-//		this, SLOT(spi_dev_stopped()));
-
-//	connect(single_transfer_btn, SIGNAL(clicked()),
-//		this, SLOT(single_transfer_btn_clicked()));
+	connect(single_transfer_btn, SIGNAL(clicked()),
+		this, SLOT(single_transfer_btn_clicked()));
 
 }
 
@@ -80,7 +78,7 @@ Window::~Window()
 
 /*!
  ********************************************************************
- * brief
+ * \brief
  *
  ********************************************************************
  */
@@ -95,7 +93,7 @@ void Window::toggle_led(bool t)
 
 /*!
  ********************************************************************
- * brief
+ * \brief
  *
  ********************************************************************
  */
@@ -104,30 +102,32 @@ void Window::spi_start_btn_clicked()
 	if (start_state == false) {
 		spi_start_btn->setText("stop");
 		start_state = true;
-		spi_device->spi_thread_start();
+		spi_device->SPI_Thread_Start();
+		single_transfer_btn->setDisabled(true);
 	} else {
 		spi_start_btn->setText("start");
 		start_state = false;
-		spi_device->spi_stop_thread();
+		spi_device->SPI_Tread_Stop();
+		single_transfer_btn->setDisabled(false);
 	}
 
 }
 
 /*!
  ********************************************************************
- * brief
+ * \brief
  *
  ********************************************************************
  */
 void Window::spi_device_value_rdy(qreal v1, qreal v2)
 {
-	ADC1_control->setrot(v1);
-	ADC2_control->setrot(v2);
+	ADC1_control->setValue(v1);
+	ADC2_control->setValue(v2);
 }
 
 /*!
  ********************************************************************
- * brief
+ * \brief
  *
  ********************************************************************
  */
@@ -140,6 +140,12 @@ void Window::spi_dev_stopped()
 char spi_out_data[4] = {0xAA, 0xF0, 0xF1, 0xF2};
 unsigned short ADC_values[2];
 
+/*!
+ ********************************************************************
+ * \brief
+ *
+ ********************************************************************
+ */
 void Window::single_transfer_btn_clicked()
 {
 	GPIO_MARK1_SET
@@ -149,8 +155,6 @@ void Window::single_transfer_btn_clicked()
 		);
 	GPIO_MARK1_CLR
 
-	ADC1_control->setrot((qreal)ADC_values[0]);
-	ADC2_control->setrot((qreal)ADC_values[1]);
-
-
+	ADC1_control->setValue((qreal)ADC_values[0]);
+	ADC2_control->setValue((qreal)ADC_values[1]);
 }

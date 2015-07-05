@@ -1,9 +1,9 @@
 /*!
  ********************************************************************
- * \file
- * \author
- * \version
- * \date
+ * \file	analogcontrol.h
+ * \author	NothernWind
+ * \version	0.0.3
+ * \date	05.07.2015
  * \brief
  *
  ********************************************************************
@@ -44,7 +44,7 @@ public:
 public slots:
 	void setPen(const QPen &pen) {this->pen = pen; update();}
 
-	void setrot(qreal value) {
+	void setValue(qreal value) {
 		in_value = value;
 		rotate_angle = value * (240.000 / (range_max - range_min));
 		update();

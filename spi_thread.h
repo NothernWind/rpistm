@@ -1,10 +1,10 @@
 /*!
  ********************************************************************
- * file
- * author	kaljan
- * version	0.0.0
- * date
- * brief
+ * \file	spi_thread.h
+ * \author	NothernWind
+ * \version	0.0.3
+ * \date	05.07.2015
+ * \brief
  *
  ********************************************************************
  */
@@ -40,27 +40,25 @@ public:
 	void SPI_Thread_DeInit(void);
 
 	bool getState(void) {return spi_state;}
+	bool getThreadState(void) {return thread_state;}
 
-	void spi_stop_thread(void) {
-		thread_state = false;
-	}
-
-	void spi_thread_start(void) {
+	void SPI_Thread_Start(void) {
 		thread_state = true;
 		this->start();
 	}
 
-	bool get_thread_state(void) {return thread_state;}
+	void SPI_Tread_Stop(void) {
+		thread_state = false;
+	}
 
 signals:
 	void SPI_Tread_DataRDY(qreal v1, qreal v2);
-	void spi_thread_stopped(void);
 
 private:
 	bool spi_state;
 	bool thread_state;
 
-	unsigned short ADC_data[2];
+	unsigned short spi_adc_data[2];
 	char out_data[4];
 
 	int reset_spi_device(void);
