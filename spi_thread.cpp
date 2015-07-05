@@ -64,7 +64,6 @@ void SPI_Thread::run()
 	}
 
 	printf("SPI Device Stopped\n");
-	emit spi_thread_stopped();
 }
 
 /*!

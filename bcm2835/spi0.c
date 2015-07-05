@@ -94,7 +94,6 @@ void spi0_unidir_poll_deinit(void)
 unsigned char spi0_unidir_poll_transfer(unsigned char data)
 {
 	unsigned char temp;
-	//bcm2835_SPI->CSR.bits.TE_EN = 1;
 	bcm2835_SPI->CSR.bits.TA = 1;
 	bcm2835_SPI->FIFO = data;
 	while (bcm2835_SPI->CSR.bits.DONE == 0);
@@ -113,7 +112,6 @@ void spi0_unidir_poll_block_transfer(
 	const char *out_block, char * in_block, int size)
 {
 	int i;
-	int wait_timeout = 0;
 	bcm2835_SPI->CSR.bits.TA = 1;
 
 	for (i = 0; i < size; i++) {

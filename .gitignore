@@ -6,3 +6,4 @@ spi_test
 Makefile
 rpistm
 moc_*.*
+*.sh
