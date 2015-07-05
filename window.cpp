@@ -51,24 +51,24 @@ Window::Window(QWidget *parent)
 
 	if (spi_device->getState() == false) return;
 
-//	spi_start_btn->setDisabled(false);
+	spi_start_btn->setDisabled(false);
 	led_box->setDisabled(false);
-	single_transfer_btn->setDisabled(false);
+//	single_transfer_btn->setDisabled(false);
 
 	connect(led_box, SIGNAL(toggled(bool)),
 		this, SLOT(toggle_led(bool)));
 
-//	connect(spi_device, SIGNAL(SPI_Tread_DataRDY(qreal,qreal)),
-//		this, SLOT(spi_device_value_rdy(qreal,qreal)));
+	connect(spi_device, SIGNAL(SPI_Tread_DataRDY(qreal,qreal)),
+		this, SLOT(spi_device_value_rdy(qreal,qreal)));
 
-//	connect(spi_start_btn, SIGNAL(clicked()),
-//		this, SLOT(spi_start_btn_clicked()));
+	connect(spi_start_btn, SIGNAL(clicked()),
+		this, SLOT(spi_start_btn_clicked()));
 
 //	connect(spi_device, SIGNAL(spi_thread_stopped()),
 //		this, SLOT(spi_dev_stopped()));
 
-	connect(single_transfer_btn, SIGNAL(clicked()),
-		this, SLOT(single_transfer_btn_clicked()));
+//	connect(single_transfer_btn, SIGNAL(clicked()),
+//		this, SLOT(single_transfer_btn_clicked()));
 
 }
 

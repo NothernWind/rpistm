@@ -39,12 +39,12 @@ SPI_Thread::~SPI_Thread()
  */
 void SPI_Thread::run()
 {
-	int error_code;
 	int spi_wait_timeout;
 	while (thread_state == true) {
 
 		spi_wait_timeout = 0;
 
+		// Ожидание готовности устройства
 		while (bcm2835_GPIO->GPLEV0.bits.GPIO24 == 1) {
 			spi_wait_timeout++;
 			if (spi_wait_timeout >= 1000000) {
@@ -56,9 +56,10 @@ void SPI_Thread::run()
 			}
 		}
 
+		// Передача данных
 		spi0_unidir_poll_block_transfer(
 			(const char *)(&out_data[0]), (char *)(&ADC_data[0]), 4);
-
+		// Сигналим о готовности данных
 		emit SPI_Tread_DataRDY((qreal)ADC_data[0], (qreal)ADC_data[1]);
 	}
 
@@ -74,16 +75,16 @@ void SPI_Thread::run()
  */
 int SPI_Thread::SPI_Thread_Init()
 {
-	int i = 10000;
+	int i = 1000000;
 
 	if (gpio_init() == -1) return -1;
 
 	if (spi0_unidir_poll_init(250,
 		SPI0_CHPA_BEGINN | SPI0_CPOL_HIGH) == -1) return -2;
 
-//	if (reset_spi_device() == -1) {
-//		return -3;
-//	}
+	if (reset_spi_device() == -1) {
+		return -3;
+	}
 
 	printf("Device Ready!\n");
 	return 0;
