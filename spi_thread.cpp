@@ -81,9 +81,9 @@ int SPI_Thread::SPI_Thread_Init()
 	if (spi0_unidir_poll_init(250,
 		SPI0_CHPA_BEGINN | SPI0_CPOL_HIGH) == -1) return -2;
 
-	if (reset_spi_device() == -1) {
-		return -3;
-	}
+//	if (reset_spi_device() == -1) {
+//		return -3;
+//	}
 
 	printf("Device Ready!\n");
 	return 0;

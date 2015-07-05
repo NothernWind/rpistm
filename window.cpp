@@ -53,7 +53,7 @@ Window::Window(QWidget *parent)
 
 //	spi_start_btn->setDisabled(false);
 	led_box->setDisabled(false);
-	single_transfer_btn->setDisabled(true);
+	single_transfer_btn->setDisabled(false);
 
 	connect(led_box, SIGNAL(toggled(bool)),
 		this, SLOT(toggle_led(bool)));
