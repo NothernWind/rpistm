@@ -24,10 +24,6 @@
 
 #include <stdio.h>
 
-//#include "bcm2835/bcm2835.h"
-//#include "bcm2835/gpio.h"
-//#include "bcm2835/spi0.h"
-
 #include "analogcontrol.h"
 
 #include "spi_thread.h"
@@ -48,15 +44,11 @@ public:
 	~Window();
 
 private slots:
-//	void spi_send_btn_clicked(void);
 	void toggle_led(bool t);
-//	void sl_changed(int value);
-
 	void spi_start_btn_clicked(void);
-
 	void spi_device_value_rdy(qreal, qreal);
-
 	void spi_dev_stopped(void);
+	void single_transfer_btn_clicked(void);
 
 private:
 	bool start_state;
@@ -69,75 +61,10 @@ private:
 	QLabel * spi_data_label;
 	AnalogControl * ADC1_control;
 	AnalogControl * ADC2_control;
+	QPushButton * single_transfer_btn;
 
 	SPI_Thread * spi_device;
-//	QSlider * slider;
 
-};
-
-/*!
- ********************************************************************
- * brief
- *
- ********************************************************************
- */
-class ADC_Dial : public QWidget
-{
-	Q_OBJECT
-public:
-	explicit ADC_Dial(QWidget *parent = 0)
-		:QWidget(parent)
-	{
-		create_adc_dial("dial");
-	}
-
-	explicit ADC_Dial(const QString &d_title, QWidget *parent = 0)
-		:QWidget(parent)
-	{
-		create_adc_dial(d_title);
-	}
-
-	void setRange(int min, int max) { dial->setRange(min, max);}
-
-	int value(void) { return dial->value();}
-	void setValue(int value) {dial->setValue(value);}
-
-private slots:
-	void dial_value_changed(int value) {
-		dv_label->setText(QString("%1").arg(value));
-	}
-
-private:
-	QGridLayout * grid;
-	QLabel * tt_label;
-	QDial * dial;
-	QLabel *dv_label;
-
-	void create_adc_dial(const QString &d_title) {
-		grid = new QGridLayout(this);
-		dial = new QDial(this);
-		tt_label = new QLabel(d_title, this);
-		dv_label = new QLabel("0", this);
-
-		setLayout(grid);
-
-		grid->addWidget(tt_label, 0, 0);
-		grid->addWidget(dial, 1, 0);
-		grid->addWidget(dv_label, 2, 0);
-
-		grid->setMargin(0);
-
-		adjustSize();
-		setFixedSize(size());
-
-		grid->setAlignment(tt_label, Qt::AlignCenter);
-				grid->setAlignment(dial, Qt::AlignHCenter);
-				grid->setAlignment(dv_label, Qt::AlignCenter);
-
-		connect(dial, SIGNAL(valueChanged(int)),
-			this, SLOT(dial_value_changed(int)));
-
-	}
 };
 
 #endif // WINDOW_H

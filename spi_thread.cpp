@@ -53,27 +53,12 @@ void SPI_Thread::run()
 				printf("Tryin to reset\n");
 				reset_spi_device();
 				continue;
-
-				//thread_state = false;
-				//emit spi_thread_stopped();
-				//return;
 			}
 		}
 
-		error_code = spi0_unidir_poll_block_transfer(
+		spi0_unidir_poll_block_transfer(
 			(const char *)(&out_data[0]), (char *)(&ADC_data[0]), 4);
 
-		if (error_code != 0) {
-			printf("SPI Data Transfer Error: %d\n"
-				"Device not response\n", error_code);
-
-			printf("Tryin to reset\n");
-			reset_spi_device();
-			continue;
-			//thread_state = false;
-			//emit spi_thread_stopped();
-			//return;
-		}
 		emit SPI_Tread_DataRDY((qreal)ADC_data[0], (qreal)ADC_data[1]);
 	}
 
@@ -103,8 +88,6 @@ int SPI_Thread::SPI_Thread_Init()
 	printf("Device Ready!\n");
 	return 0;
 }
-
-
 
 /*!
  ********************************************************************
