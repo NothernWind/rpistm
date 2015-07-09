@@ -149,6 +149,20 @@ unsigned short ADC_values[2];
 void Window::single_transfer_btn_clicked()
 {
 	GPIO_MARK1_SET
+	spi0_unidir_poll_transfer(0x10);
+
+	int spi_wait_timeout = 0;
+
+	// Ожидание готовности устройства
+	while (bcm2835_GPIO->GPLEV0.bits.GPIO24 == 1) {
+		spi_wait_timeout++;
+		if (spi_wait_timeout >= 1000000) {
+			spi_wait_timeout = 0;
+			printf("SPI Device Timeout error\n");
+			break;
+		}
+	}
+
 	spi0_unidir_poll_block_transfer(
 		(const char *)(&spi_out_data[0]),
 		(char *)(&ADC_values[0]), 4

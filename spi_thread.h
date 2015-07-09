@@ -51,6 +51,8 @@ public:
 		thread_state = false;
 	}
 
+
+
 signals:
 	void SPI_Tread_DataRDY(qreal v1, qreal v2);
 
@@ -62,6 +64,7 @@ private:
 	char out_data[4];
 
 	int reset_spi_device(void);
+
 };
 
 #endif // SPI_THREAD_H
