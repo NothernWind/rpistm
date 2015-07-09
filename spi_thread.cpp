@@ -108,7 +108,7 @@ void SPI_Thread::SPI_Thread_DeInit()
 int SPI_Thread::reset_spi_device()
 {
 	int rst_timeout = 0;
-	int rst_wait = 10000;
+	int rst_wait = 1000000;
 
 	printf("Reset the Device\n");
 
