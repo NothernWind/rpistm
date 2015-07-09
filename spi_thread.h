@@ -12,6 +12,7 @@
 #define SPI_THREAD_H
 
 #include <QThread>
+//#include <QTimer>
 
 #include <stdio.h>
 
@@ -55,6 +56,9 @@ public:
 
 signals:
 	void SPI_Tread_DataRDY(qreal v1, qreal v2);
+
+//private slots:
+
 
 private:
 	bool spi_state;

@@ -108,14 +108,15 @@ void SPI_Thread::SPI_Thread_DeInit()
 int SPI_Thread::reset_spi_device()
 {
 	int rst_timeout = 0;
-	int rst_wait = 1000000;
+//	int rst_wait = 1000000;
 
 	printf("Reset the Device\n");
 
 	GPIO_MARK1_SET
 
 	bcm2835_GPIO->GPCLR0 = GPIO_GPCLR0_GP25;
-	while (rst_wait--);
+	sleep(1);
+	//while (rst_wait--);
 	bcm2835_GPIO->GPSET0 = GPIO_GPSET0_GP25;
 
 	GPIO_MARK1_CLR
