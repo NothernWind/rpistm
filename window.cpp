@@ -43,10 +43,10 @@ Window::Window(QWidget *parent)
 	grid->addWidget(ADC1_control, 1, 0, 4, 1);
 	grid->addWidget(ADC2_control, 1, 1, 4, 1);
 
-	grid->addWidget(led_box, 1, 3);
-	grid->addWidget(spi_start_btn, 2, 3);
-	grid->addWidget(single_transfer_btn, 3, 3);
-	grid->addWidget(spi_data_label, 5, 0, 1, 2);
+    grid->addWidget(led_box, 1, 2);
+    grid->addWidget(spi_start_btn, 2, 2);
+    grid->addWidget(single_transfer_btn, 3, 2);
+    grid->addWidget(spi_data_label, 5, 0, 1, 3);
 
 
 	adjustSize();
