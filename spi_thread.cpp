@@ -24,6 +24,7 @@ SPI_Thread::SPI_Thread()
 	for (int i = 0; i < 4; i++) {
 		out_data[i] = 0xFF;
 	}
+	out_data[0] = 0x10;
 }
 
 SPI_Thread::~SPI_Thread()
@@ -53,6 +54,25 @@ void SPI_Thread::run()
 				printf("Tryin to reset\n");
 				reset_spi_device();
 				continue;
+			}
+		}
+
+		out_data[0] = 0x10;
+
+		// Передача данных
+		spi0_unidir_poll_block_transfer(
+			(const char *)(&out_data[0]), (char *)(&spi_adc_data[0]), 2);
+
+		// Ожидание готовности устройства
+		while (bcm2835_GPIO->GPLEV0.bits.GPIO24 == 1) {
+			spi_wait_timeout++;
+			if (spi_wait_timeout >= 1000000) {
+				spi_wait_timeout = 0;
+				printf("SPI Device Timeout error\n");
+				//printf("Tryin to reset\n");
+				//reset_spi_device();
+				//continue;
+				return;
 			}
 		}
 

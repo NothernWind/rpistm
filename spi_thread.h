@@ -65,7 +65,7 @@ private:
 	bool thread_state;
 
 	unsigned short spi_adc_data[2];
-	char out_data[4];
+	char out_data[8];
 
 	int reset_spi_device(void);
 

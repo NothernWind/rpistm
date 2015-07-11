@@ -137,7 +137,7 @@ void Window::spi_dev_stopped()
 	start_state = false;
 }
 
-char spi_out_data[4] = {0x10, 0xF0, 0xF1, 0xF2};
+char spi_out_data[4] = {0x10, 0x00, 0xFF, 0xFF};
 unsigned short ADC_values[2];
 
 /*!
@@ -151,7 +151,7 @@ void Window::single_transfer_btn_clicked()
 	GPIO_MARK1_SET
 	spi0_unidir_poll_block_transfer(
 		(const char *)(&spi_out_data[0]),
-		(char *)(&ADC_values[0]), 2
+		(char *)(&spi_out_data[2]), 2
 		);
 
 	int spi_wait_timeout = 0;
