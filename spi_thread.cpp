@@ -138,7 +138,7 @@ int SPI_Thread::reset_spi_device()
 	sleep(1);
 	//while (rst_wait--);
 	bcm2835_GPIO->GPSET0 = GPIO_GPSET0_GP25;
-
+	sleep(1);
 	GPIO_MARK1_CLR
 
 	while (bcm2835_GPIO->GPLEV0.bits.GPIO24 == 1) {
