@@ -67,6 +67,8 @@ private:
 	SPI_Thread * spi_device;
 
 	CharacterDisplay * ch_display;
+
+	t_spi_request spi_request;
 };
 
 #endif // WINDOW_H

@@ -20,6 +20,15 @@
 #include "bcm2835/gpio.h"
 #include "bcm2835/spi0.h"
 
+typedef union _t_spi_request {
+	unsigned short all;
+	struct {
+		unsigned :8;
+		unsigned rqn:6;
+		unsigned rw:1;
+	} bits;
+}t_spi_request;
+
 /*!
  ********************************************************************
  * brief
@@ -52,8 +61,6 @@ public:
 		thread_state = false;
 	}
 
-
-
 signals:
 	void SPI_Tread_DataRDY(qreal v1, qreal v2);
 
@@ -68,6 +75,8 @@ private:
 	char out_data[8];
 
 	int reset_spi_device(void);
+
+	t_spi_request spi_request;
 
 };
 

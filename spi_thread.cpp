@@ -57,11 +57,12 @@ void SPI_Thread::run()
 			}
 		}
 
-		out_data[0] = 0x10;
+		spi_request.bits.rqn = 0x01;
+		spi_request.bits.rw = 1;
 
-		// Передача данных
 		spi0_unidir_poll_block_transfer(
-			(const char *)(&out_data[0]), (char *)(&spi_adc_data[0]), 2);
+			(const char *)(&spi_request),
+			(char *)(&spi_adc_data[0]), 2);
 
 		// Ожидание готовности устройства
 		while (bcm2835_GPIO->GPLEV0.bits.GPIO24 == 1) {

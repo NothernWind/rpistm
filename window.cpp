@@ -155,8 +155,12 @@ unsigned short ADC_values[2];
 void Window::single_transfer_btn_clicked()
 {
 	GPIO_MARK1_SET
+
+	spi_request.bits.rqn = 0x01;
+	spi_request.bits.rw = 1;
+
 	spi0_unidir_poll_block_transfer(
-		(const char *)(&spi_out_data[0]),
+		(const char *)(&spi_request),
 		(char *)(&spi_out_data[2]), 2
 		);
 
