@@ -83,9 +83,9 @@ public:
 	}
 
 signals:
-	void changed(char *str);// Изменили символ
+	void changed(const char *str);// РР·РјРµРЅРёР»Рё СЃРёРјРІРѕР»
 
-	void clicked(int ch); // тыкнули в символ
+	void clicked(int ch); // С‚С‹РєРЅСѓР»Рё РІ СЃРёРјРІРѕР»
 
 public slots:
 	void setPen(const QPen &pen){this->pen = pen;update();}
@@ -101,27 +101,27 @@ protected:
 	void keyReleaseEvent(QKeyEvent *event);
 
 private:
-	char * display_str;			// массив символов выводимый на экран
-	int n_char;					// количество символов в строке
-	int n_str;					// количество строк экрана
-	int selected_char;			// выделенный символ
-	int selected_str;			// выделенная строка
-	int cursor_char;			// в каком символе находится курсор
-	int cursor_str;				// в какой строке находится курсор
-	int cursor_blink_interval;	// интервал мерцания курсора
-	bool cursor_on;				// также предполагается наличие курсора
+	char * display_str;			// РјР°СЃСЃРёРІ СЃРёРјРІРѕР»РѕРІ РІС‹РІРѕРґРёРјС‹Р№ РЅР° СЌРєСЂР°РЅ
+	int n_char;					// РєРѕР»РёС‡РµСЃС‚РІРѕ СЃРёРјРІРѕР»РѕРІ РІ СЃС‚СЂРѕРєРµ
+	int n_str;					// РєРѕР»РёС‡РµСЃС‚РІРѕ СЃС‚СЂРѕРє СЌРєСЂР°РЅР°
+	int selected_char;			// РІС‹РґРµР»РµРЅРЅС‹Р№ СЃРёРјРІРѕР»
+	int selected_str;			// РІС‹РґРµР»РµРЅРЅР°СЏ СЃС‚СЂРѕРєР°
+	int cursor_char;			// РІ РєР°РєРѕРј СЃРёРјРІРѕР»Рµ РЅР°С…РѕРґРёС‚СЃСЏ РєСѓСЂСЃРѕСЂ
+	int cursor_str;				// РІ РєР°РєРѕР№ СЃС‚СЂРѕРєРµ РЅР°С…РѕРґРёС‚СЃСЏ РєСѓСЂСЃРѕСЂ
+	int cursor_blink_interval;	// РёРЅС‚РµСЂРІР°Р» РјРµСЂС†Р°РЅРёСЏ РєСѓСЂСЃРѕСЂР°
+	bool cursor_on;				// С‚Р°РєР¶Рµ РїСЂРµРґРїРѕР»Р°РіР°РµС‚СЃСЏ РЅР°Р»РёС‡РёРµ РєСѓСЂСЃРѕСЂР°
 	bool cursor_state;			// = true;
 	bool timer_state;			// = false;
-	bool shift;					// нажата клавиша шифт
-	bool read_only;				// только чтение
-	int character;				// нажатая кнопка на клавиатуре
-	QColor bg_color;			// цвет фона
-	QColor frame_color;			// цвет рамки экрана
-	QColor cbg_color;			// цвет фона символа
-	QColor cfg_color;			// цвет символа
-	QColor bg_select_color;		// фон цвета выделения
-	QColor frame_select_color;	// цвет рамки выделения
-	QPen pen;					// пень
+	bool shift;					// РЅР°Р¶Р°С‚Р° РєР»Р°РІРёС€Р° С€РёС„С‚
+	bool read_only;				// С‚РѕР»СЊРєРѕ С‡С‚РµРЅРёРµ
+	int character;				// РЅР°Р¶Р°С‚Р°СЏ РєРЅРѕРїРєР° РЅР° РєР»Р°РІРёР°С‚СѓСЂРµ
+	QColor bg_color;			// С†РІРµС‚ С„РѕРЅР°
+	QColor frame_color;			// С†РІРµС‚ СЂР°РјРєРё СЌРєСЂР°РЅР°
+	QColor cbg_color;			// С†РІРµС‚ С„РѕРЅР° СЃРёРјРІРѕР»Р°
+	QColor cfg_color;			// С†РІРµС‚ СЃРёРјРІРѕР»Р°
+	QColor bg_select_color;		// С„РѕРЅ С†РІРµС‚Р° РІС‹РґРµР»РµРЅРёСЏ
+	QColor frame_select_color;	// С†РІРµС‚ СЂР°РјРєРё РІС‹РґРµР»РµРЅРёСЏ
+	QPen pen;					// РїРµРЅСЊ
 
 	void move_left(void);
 	void move_right(void);

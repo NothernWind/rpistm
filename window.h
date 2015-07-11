@@ -51,6 +51,8 @@ private slots:
 	void spi_dev_stopped(void);
 	void single_transfer_btn_clicked(void);
 
+	void lcd_changed(const char *);
+
 private:
 	bool start_state;
 

@@ -74,6 +74,8 @@ Window::Window(QWidget *parent)
 	connect(single_transfer_btn, SIGNAL(clicked()),
 		this, SLOT(single_transfer_btn_clicked()));
 
+	connect(ch_display, SIGNAL(changed(const char*)),
+		this, SLOT(lcd_changed(const char*)));
 }
 
 Window::~Window()
@@ -184,4 +186,38 @@ void Window::single_transfer_btn_clicked()
 
 	ADC1_control->setValue((qreal)ADC_values[0]);
 	ADC2_control->setValue((qreal)ADC_values[1]);
+}
+
+char tmp_dt[32];
+
+void Window::lcd_changed(const char * lstr)
+{
+	memcpy(strrr, lstr, 32);
+	GPIO_MARK1_SET
+
+	spi_request.bits.rqn = 0x01;
+	spi_request.bits.rw = 0;
+
+	spi0_unidir_poll_block_transfer(
+		(const char *)(&spi_request),
+		(char *)(&spi_out_data[2]), 2
+		);
+
+	int spi_wait_timeout = 0;
+
+	// Ожидание готовности устройства
+	while (bcm2835_GPIO->GPLEV0.bits.GPIO24 == 1) {
+		spi_wait_timeout++;
+		if (spi_wait_timeout >= 1000000) {
+			spi_wait_timeout = 0;
+			printf("SPI Device Timeout error\n");
+			break;
+		}
+	}
+
+	spi0_unidir_poll_block_transfer(
+		(const char *)(&strrr[0]),
+		(char *)(&tmp_dt[0]), 32
+		);
+	GPIO_MARK1_CLR
 }
