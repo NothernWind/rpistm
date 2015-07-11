@@ -149,8 +149,9 @@ int SPI_Thread::reset_spi_device()
 			return -1;
 		}
 	}
-
+	GPIO_MARK1_SET
 	printf("Device Ready!\n");
+	GPIO_MARK1_CLR
 
 	return 0;
 }
