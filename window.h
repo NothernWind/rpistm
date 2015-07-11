@@ -25,6 +25,7 @@
 #include <stdio.h>
 
 #include "analogcontrol.h"
+#include "characterdisplay.h"
 
 #include "spi_thread.h"
 
@@ -65,6 +66,7 @@ private:
 
 	SPI_Thread * spi_device;
 
+	CharacterDisplay * ch_display;
 };
 
 #endif // WINDOW_H

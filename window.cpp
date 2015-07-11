@@ -20,6 +20,7 @@ Window::Window(QWidget *parent)
 	, ADC1_control(new AnalogControl(this))
 	, ADC2_control(new AnalogControl(this))
 	, single_transfer_btn(new QPushButton("send", this))
+	, ch_display(new CharacterDisplay(this))
 {
 	setFont(QFont("Monospace", 10, -1, false));
 	setLayout(grid);
@@ -34,13 +35,14 @@ Window::Window(QWidget *parent)
 	spi_start_btn->setDisabled(true);
 	single_transfer_btn->setDisabled(true);
 
-	grid->addWidget(ADC1_control, 0, 0);
-	grid->addWidget(ADC2_control, 0, 1);
+	grid->addWidget(ch_display, 0, 1, 1, 2);
+	grid->addWidget(ADC1_control, 1, 0);
+	grid->addWidget(ADC2_control, 1, 1);
 
-	grid->addWidget(led_box, 1, 0);
-	grid->addWidget(spi_start_btn, 1, 1);
-	grid->addWidget(single_transfer_btn, 2, 0);
-	grid->addWidget(spi_data_label, 3, 0, 1, 2);
+	grid->addWidget(led_box, 2, 0);
+	grid->addWidget(spi_start_btn, 2, 1);
+	grid->addWidget(single_transfer_btn, 3, 0);
+	grid->addWidget(spi_data_label, 4, 0, 1, 2);
 
 
 	adjustSize();
