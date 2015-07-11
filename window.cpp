@@ -10,7 +10,7 @@
  */
 #include "window.h"
 
-char strrr[32] = "0123456789ABCDEF0123456789ABCDEF";
+char strrr[] = "0123456789ABCDEF0123456789ABCDEF";
 
 Window::Window(QWidget *parent)
 	: QWidget(parent)
