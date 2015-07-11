@@ -40,13 +40,13 @@ Window::Window(QWidget *parent)
 	ch_display->write_string(strrr);
 
 	grid->addWidget(ch_display, 0, 0, 1, 3);
-	grid->addWidget(ADC1_control, 1, 0);
-	grid->addWidget(ADC2_control, 1, 1);
+	grid->addWidget(ADC1_control, 1, 0, 4, 1);
+	grid->addWidget(ADC2_control, 1, 1, 4, 1);
 
-	grid->addWidget(led_box, 2, 0);
-	grid->addWidget(spi_start_btn, 2, 1);
-	grid->addWidget(single_transfer_btn, 3, 0);
-	grid->addWidget(spi_data_label, 4, 0, 1, 2);
+	grid->addWidget(led_box, 1, 3);
+	grid->addWidget(spi_start_btn, 2, 3);
+	grid->addWidget(single_transfer_btn, 3, 3);
+	grid->addWidget(spi_data_label, 5, 0, 1, 2);
 
 
 	adjustSize();
