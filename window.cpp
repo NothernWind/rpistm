@@ -10,6 +10,8 @@
  */
 #include "window.h"
 
+char strrr[32] = "0123456789ABCDEF0123456789ABCDEF";
+
 Window::Window(QWidget *parent)
 	: QWidget(parent)
 	, start_state(false)
@@ -35,7 +37,9 @@ Window::Window(QWidget *parent)
 	spi_start_btn->setDisabled(true);
 	single_transfer_btn->setDisabled(true);
 
-	grid->addWidget(ch_display, 0, 1, 1, 2);
+	ch_display->write_string(strrr);
+
+	grid->addWidget(ch_display, 0, 0, 1, 2);
 	grid->addWidget(ADC1_control, 1, 0);
 	grid->addWidget(ADC2_control, 1, 1);
 
