@@ -39,7 +39,7 @@ Window::Window(QWidget *parent)
 
 	ch_display->write_string(strrr);
 
-	grid->addWidget(ch_display, 0, 0, 1, 2);
+	grid->addWidget(ch_display, 0, 0, 1, 3);
 	grid->addWidget(ADC1_control, 1, 0);
 	grid->addWidget(ADC2_control, 1, 1);
 
