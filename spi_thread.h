@@ -20,6 +20,7 @@
 #include "bcm2835/gpio.h"
 #include "bcm2835/spi0.h"
 
+class Timer;
 class WDTimer;
 
 typedef union _t_spi_request {
@@ -81,10 +82,38 @@ private:
 
 	WDTimer *w_timer;
 
+	Timer *timer;
+
 	int reset_spi_device(void);
 };
 
+class Timer : public QThread
+{
+	Q_OBJECT
+public:
+	Timer() : tmr(new QTimer(this)), tmout(false) {
+		tmr->setSingleShot(true);
+		connect(tmr, SIGNAL(timeout()), this, SLOT(timeout()));
+		setPriority(QThread::HighPriority);
+	}
 
+	void run() {tmr->start(delay); exec();}
+
+	void t_start(int value) {delay = value;	start();}
+	void stop(void) {tmr->stop();}
+
+	bool get_status(void) {return tmout;}
+	void reset_status(void) {tmout = false;}
+
+private slots:
+	void timeout(void) {tmout = true;}
+
+private:
+	bool tmout;
+	int delay;
+	QTimer * tmr;
+
+};
 
 /*!
  ********************************************************************
