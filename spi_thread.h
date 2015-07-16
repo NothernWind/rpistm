@@ -61,7 +61,7 @@ signals:
 	void SPI_Tread_DataRDY(qreal v1, qreal v2);
 
 private slots:
-	void w_time_timeout(void);
+	void w_timer_timeout(void);
 
 private:
 	bool spi_state;
