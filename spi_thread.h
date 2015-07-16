@@ -91,7 +91,7 @@ class Timer : public QThread
 {
 	Q_OBJECT
 public:
-	Timer() : tmr(new QTimer(this)), tmout(false) {
+	Timer() : tmout(false), tmr(new QTimer(this)) {
 		tmr->setSingleShot(true);
 		connect(tmr, SIGNAL(timeout()), this, SLOT(timeout()));
 		setPriority(QThread::HighPriority);
