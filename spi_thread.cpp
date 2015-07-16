@@ -14,7 +14,7 @@ SPI_Thread::SPI_Thread()
 	: spi_state(false)
 	, thread_state(false)
 	, spi_timeout(false)
-	, w_timer(new WDTimer(this, this))
+	, w_timer(new WDTimer(this))
 {
 //	w_timer->setSingleShot(true);
 //	connect(w_timer, SIGNAL(timeout()),
@@ -151,8 +151,9 @@ int SPI_Thread::wait_for_ready()
 
 	while (bcm2835_GPIO->GPLEV0.bits.GPIO24 == 1) {
 		// А тут будем проверять флаг таймаута
-		if (spi_timeout == true) {
-			spi_timeout = false;
+		if (w_timer->get_status() == true) {
+			w_timer->reset_status();
+//			spi_timeout = false;
 			printf("Wait timeout error\n");
 			return -1;
 		}
@@ -176,8 +177,9 @@ int SPI_Thread::reset_spi_device()
 	GPIO_MARK1_SET
 	bcm2835_GPIO->GPCLR0 = GPIO_GPCLR0_GP25;
 	w_timer->start(100);
-	while(spi_timeout == false);
-	spi_timeout = false;
+	while(w_timer->get_status() == false);
+	w_timer->reset_status();
+//	spi_timeout = false;
 	bcm2835_GPIO->GPSET0 = GPIO_GPSET0_GP25;
 
 	if (wait_for_ready() == -1) {

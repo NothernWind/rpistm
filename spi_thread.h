@@ -84,6 +84,8 @@ private:
 	int reset_spi_device(void);
 };
 
+
+
 /*!
  ********************************************************************
  * \brief
@@ -94,20 +96,21 @@ class WDTimer : public QTimer
 {
 	Q_OBJECT
 public:
-	explicit WDTimer(SPI_Thread *strh, QObject *parent = 0)
+	explicit WDTimer(QObject *parent = 0)
 		: QTimer(parent) {
 		setSingleShot(true);
 		connect(this, SIGNAL(timeout()), SLOT(wdt_timeout()));
-		spi_tread = strh;
+		tmout = false;
 	}
+
+	bool get_status(void) {return tm_out;}
+	void reset_status(void) {tmout = false;}
 
 private slots:
-	void wdt_timeout(void) {
-		spi_tread->set_time_out(true);
-	}
+	void wdt_timeout(void) {tmout = true;}
 
 private:
-	SPI_Thread *spi_tread;
+	bool tmout;
 };
 
 #endif // SPI_THREAD_H
