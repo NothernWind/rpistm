@@ -76,6 +76,10 @@ Window::Window(QWidget *parent)
 
 	connect(ch_display, SIGNAL(changed(const char*)),
 		this, SLOT(lcd_changed(const char*)));
+
+	tmr = new QTimer(this);
+	tmr->setSingleShot(true);
+	connect(tmr, SIGNAL(timeout()), this, SLOT(timeout_t()));
 }
 
 Window::~Window()
@@ -156,36 +160,38 @@ unsigned short ADC_values[2];
  */
 void Window::single_transfer_btn_clicked()
 {
-	GPIO_MARK1_SET
+	tmr->start(100);
 
-	spi_request.bits.rqn = 0x01;
-	spi_request.bits.rw = 1;
+//	GPIO_MARK1_SET
 
-	spi0_unidir_poll_block_transfer(
-		(const char *)(&spi_request),
-		(char *)(&spi_out_data[2]), 2
-		);
+//	spi_request.bits.rqn = 0x01;
+//	spi_request.bits.rw = 1;
 
-	int spi_wait_timeout = 0;
+//	spi0_unidir_poll_block_transfer(
+//		(const char *)(&spi_request),
+//		(char *)(&spi_out_data[2]), 2
+//		);
 
-	// Ожидание готовности устройства
-	while (bcm2835_GPIO->GPLEV0.bits.GPIO24 == 1) {
-		spi_wait_timeout++;
-		if (spi_wait_timeout >= 1000000) {
-			spi_wait_timeout = 0;
-			printf("SPI Device Timeout error\n");
-			break;
-		}
-	}
+//	int spi_wait_timeout = 0;
 
-	spi0_unidir_poll_block_transfer(
-		(const char *)(&spi_out_data[0]),
-		(char *)(&ADC_values[0]), 4
-		);
-	GPIO_MARK1_CLR
+//	// Ожидание готовности устройства
+//	while (bcm2835_GPIO->GPLEV0.bits.GPIO24 == 1) {
+//		spi_wait_timeout++;
+//		if (spi_wait_timeout >= 1000000) {
+//			spi_wait_timeout = 0;
+//			printf("SPI Device Timeout error\n");
+//			break;
+//		}
+//	}
 
-	ADC1_control->setValue((qreal)ADC_values[0]);
-	ADC2_control->setValue((qreal)ADC_values[1]);
+//	spi0_unidir_poll_block_transfer(
+//		(const char *)(&spi_out_data[0]),
+//		(char *)(&ADC_values[0]), 4
+//		);
+//	GPIO_MARK1_CLR
+
+//	ADC1_control->setValue((qreal)ADC_values[0]);
+//	ADC2_control->setValue((qreal)ADC_values[1]);
 }
 
 char tmp_dt[32];
@@ -220,6 +226,11 @@ void Window::lcd_changed(const char * lstr)
 		(char *)(&tmp_dt[0]), 32
 		);
 	GPIO_MARK1_CLR
+}
+
+void Window::timeout_t()
+{
+	spi_data_label->setText("timeout");
 }
 
 /*

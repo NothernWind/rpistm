@@ -53,6 +53,8 @@ private slots:
 
 	void lcd_changed(const char *);
 
+	void timeout_t(void);
+
 private:
 	bool start_state;
 
@@ -71,6 +73,8 @@ private:
 	CharacterDisplay * ch_display;
 
 	t_spi_request spi_request;
+
+	QTimer *tmr;
 };
 
 #endif // WINDOW_H
