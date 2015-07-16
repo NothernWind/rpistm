@@ -103,7 +103,7 @@ public:
 		tmout = false;
 	}
 
-	bool get_status(void) {return tm_out;}
+	bool get_status(void) {return tmout;}
 	void reset_status(void) {tmout = false;}
 
 private slots:
