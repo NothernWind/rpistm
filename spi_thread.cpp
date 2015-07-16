@@ -14,11 +14,11 @@ SPI_Thread::SPI_Thread()
 	: spi_state(false)
 	, thread_state(false)
 	, spi_timeout(false)
-	, w_timer(new QTimer(this))
+	, w_timer(new WDTimer(this))
 {
-	w_timer->setSingleShot(true);
-	connect(w_timer, SIGNAL(timeout()),
-		this, SLOT(w_timer_timeout()));
+//	w_timer->setSingleShot(true);
+//	connect(w_timer, SIGNAL(timeout()),
+//		this, SLOT(w_timer_timeout()));
 
 	int error_code = SPI_Thread_Init();
 	if (error_code != 0) {
@@ -169,38 +169,38 @@ int SPI_Thread::wait_for_ready()
  */
 int SPI_Thread::reset_spi_device()
 {
-	int rst_timeout = 0;
+//	int rst_timeout = 0;
 
 	printf("Reset the Device\n");
 
-//	GPIO_MARK1_SET
-//	bcm2835_GPIO->GPCLR0 = GPIO_GPCLR0_GP25;
-//	w_timer->start(100);
-//	while(spi_timeout == false);
-//	spi_timeout = false;
-//	bcm2835_GPIO->GPSET0 = GPIO_GPSET0_GP25;
-
-//	if (wait_for_ready() == -1) {
-//		printf("Reset Device Error\n");
-
-//		return -1;
-//	}
-
-//	GPIO_MARK1_CLR
-
+	GPIO_MARK1_SET
 	bcm2835_GPIO->GPCLR0 = GPIO_GPCLR0_GP25;
-	sleep(1);
+	w_timer->start(100);
+	while(spi_timeout == false);
+	spi_timeout = false;
 	bcm2835_GPIO->GPSET0 = GPIO_GPSET0_GP25;
-	sleep(1);
 
-	while (bcm2835_GPIO->GPLEV0.bits.GPIO24 == 1) {
-		rst_timeout++;
-		if (rst_timeout >= 1000000) {
-			rst_timeout = 0;
-			printf("Reset Timeout\n");
-			return -1;
-		}
+	if (wait_for_ready() == -1) {
+		printf("Reset Device Error\n");
+
+		return -1;
 	}
+
+	GPIO_MARK1_CLR
+
+//	bcm2835_GPIO->GPCLR0 = GPIO_GPCLR0_GP25;
+//	sleep(1);
+//	bcm2835_GPIO->GPSET0 = GPIO_GPSET0_GP25;
+//	sleep(1);
+
+//	while (bcm2835_GPIO->GPLEV0.bits.GPIO24 == 1) {
+//		rst_timeout++;
+//		if (rst_timeout >= 1000000) {
+//			rst_timeout = 0;
+//			printf("Reset Timeout\n");
+//			return -1;
+//		}
+//	}
 	GPIO_MARK1_SET
 	printf("Device Ready!\n");
 	GPIO_MARK1_CLR

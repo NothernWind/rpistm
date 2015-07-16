@@ -20,6 +20,8 @@
 #include "bcm2835/gpio.h"
 #include "bcm2835/spi0.h"
 
+class WDTimer;
+
 typedef union _t_spi_request {
 	unsigned short all;
 	struct {
@@ -57,6 +59,10 @@ public:
 
 	int wait_for_ready(void);
 
+	void set_time_out(bool t) {
+		spi_timeout = t;
+	}
+
 signals:
 	void SPI_Tread_DataRDY(qreal v1, qreal v2);
 
@@ -73,9 +79,35 @@ private:
 
 	t_spi_request spi_request;
 
-	QTimer *w_timer;
+	WDTimer *w_timer;
 
 	int reset_spi_device(void);
+};
+
+/*!
+ ********************************************************************
+ * \brief
+ *
+ ********************************************************************
+ */
+class WDTimer : public QTimer
+{
+	Q_OBJECT
+public:
+	explicit WDTimer(SPI_Thread *strh, QObject *parent = 0)
+		: QTimer(parent) {
+		setSingleShot(true);
+		connect(this, SIGNAL(timeout()), SLOT(wdt_timeout()));
+		spi_tread = strh;
+	}
+
+private slots:
+	void wdt_timeout(void) {
+		spi_tread->set_time_out(true);
+	}
+
+private:
+	SPI_Thread *spi_tread;
 };
 
 #endif // SPI_THREAD_H
