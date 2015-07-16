@@ -14,7 +14,7 @@ SPI_Thread::SPI_Thread()
 	: spi_state(false)
 	, thread_state(false)
 	, spi_timeout(false)
-	, w_timer(new WDTimer(this))
+	, w_timer(new WDTimer(this, this))
 {
 //	w_timer->setSingleShot(true);
 //	connect(w_timer, SIGNAL(timeout()),
