@@ -66,7 +66,7 @@ extern struct bcm2835_periph gpio_dsc;
 extern struct bcm2835_periph spi_dsc;
 
 // Public Prototypes ------------------------------------------------
-int bcm2835_periph_map(struct bcm2835_periph * pr, unsigned long addr) ;
+int bcm2835_periph_map(struct bcm2835_periph * pr, unsigned long addr);
 void bcm2835_periph_unmap(struct bcm2835_periph * pr);
 
 #ifdef __cplusplus

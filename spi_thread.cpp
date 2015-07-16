@@ -13,7 +13,13 @@
 SPI_Thread::SPI_Thread()
 	: spi_state(false)
 	, thread_state(false)
+	, spi_timeout(false)
+	, w_timer(new QTimer(this))
 {
+	w_timer->setSingleShot(true);
+	connect(w_timer, SIGNAL(timeout()),
+		this, SLOT(w_timer_timeout()));
+
 	int error_code = SPI_Thread_Init();
 	if (error_code != 0) {
 		printf("SPI Thread Init Failed. Error %d\n", error_code);
@@ -27,9 +33,43 @@ SPI_Thread::SPI_Thread()
 	out_data[0] = 0x10;
 }
 
+//! Нужно обязательно всё это деинициализировать
 SPI_Thread::~SPI_Thread()
 {
 	SPI_Thread_DeInit();
+}
+
+/*!
+ ********************************************************************
+ * \brief
+ *
+ ********************************************************************
+ */
+int SPI_Thread::SPI_Thread_Init()
+{
+	if (gpio_init() == -1) return -1;
+
+	if (spi0_unidir_poll_init(250,
+		SPI0_CHPA_BEGINN | SPI0_CPOL_HIGH) == -1) return -2;
+
+	if (reset_spi_device() == -1) {
+		return -3;
+	}
+
+	printf("Device Ready!\n");
+	return 0;
+}
+
+/*!
+ ********************************************************************
+ * \brief
+ *
+ ********************************************************************
+ */
+void SPI_Thread::SPI_Thread_DeInit()
+{
+	gpio_deinit();
+	spi0_unidir_poll_deinit();
 }
 
 /*!
@@ -93,19 +133,9 @@ void SPI_Thread::run()
  *
  ********************************************************************
  */
-int SPI_Thread::SPI_Thread_Init()
+void SPI_Thread::w_timer_timeout()
 {
-	if (gpio_init() == -1) return -1;
-
-	if (spi0_unidir_poll_init(250,
-		SPI0_CHPA_BEGINN | SPI0_CPOL_HIGH) == -1) return -2;
-
-	if (reset_spi_device() == -1) {
-		return -3;
-	}
-
-	printf("Device Ready!\n");
-	return 0;
+	spi_timeout = true;
 }
 
 /*!
@@ -114,10 +144,21 @@ int SPI_Thread::SPI_Thread_Init()
  *
  ********************************************************************
  */
-void SPI_Thread::SPI_Thread_DeInit()
+int SPI_Thread::wait_for_ready()
 {
-	gpio_deinit();
-	spi0_unidir_poll_deinit();
+	// Сначала запустим таймер
+	w_timer->start(500);
+
+	while (bcm2835_GPIO->GPLEV0.bits.GPIO24 == 1) {
+		// А тут будем проверять флаг таймаута
+		if (spi_timeout == true) {
+			spi_timeout = false;
+			printf("Wait timeout error\n");
+			return -1;
+		}
+	}
+	w_timer->stop();
+	return 0;
 }
 
 /*!
@@ -129,27 +170,37 @@ void SPI_Thread::SPI_Thread_DeInit()
 int SPI_Thread::reset_spi_device()
 {
 	int rst_timeout = 0;
-//	int rst_wait = 1000000;
 
 	printf("Reset the Device\n");
 
 	GPIO_MARK1_SET
-
 	bcm2835_GPIO->GPCLR0 = GPIO_GPCLR0_GP25;
-	sleep(1);
-	//while (rst_wait--);
+	w_timer->start(100);
+	while(spi_timeout == false);
+	spi_timeout = false;
 	bcm2835_GPIO->GPSET0 = GPIO_GPSET0_GP25;
-	sleep(1);
+
+	if (wait_for_ready() == -1) {
+		printf("Reset Device Error\n");
+
+		return -1;
+	}
+
 	GPIO_MARK1_CLR
 
-	while (bcm2835_GPIO->GPLEV0.bits.GPIO24 == 1) {
-		rst_timeout++;
-		if (rst_timeout >= 1000000) {
-			rst_timeout = 0;
-			printf("Reset Timeout\n");
-			return -1;
-		}
-	}
+//	bcm2835_GPIO->GPCLR0 = GPIO_GPCLR0_GP25;
+//	sleep(1);
+//	bcm2835_GPIO->GPSET0 = GPIO_GPSET0_GP25;
+//	sleep(1);
+
+//	while (bcm2835_GPIO->GPLEV0.bits.GPIO24 == 1) {
+//		rst_timeout++;
+//		if (rst_timeout >= 1000000) {
+//			rst_timeout = 0;
+//			printf("Reset Timeout\n");
+//			return -1;
+//		}
+//	}
 	GPIO_MARK1_SET
 	printf("Device Ready!\n");
 	GPIO_MARK1_CLR

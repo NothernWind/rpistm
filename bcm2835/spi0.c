@@ -121,3 +121,40 @@ void spi0_unidir_poll_block_transfer(
 	}
 	bcm2835_SPI->CSR.bits.TA = 0;
 }
+
+/*!
+ ********************************************************************
+ * \brief
+ *
+ ********************************************************************
+ */
+void spi0_unidir_poll_block_rx(char *block, int size)
+{
+	int i;
+	bcm2835_SPI->CSR.bits.TA = 1;
+	for (i = 0; i < size; i++) {
+		bcm2835_SPI->FIFO = 0xFF;
+		while (bcm2835_SPI->CSR.bits.DONE == 0);
+		block[i] = (unsigned char)(bcm2835_SPI->FIFO);
+	}
+	bcm2835_SPI->CSR.bits.TA = 0;
+}
+
+/*!
+ ********************************************************************
+ * \brief
+ *
+ ********************************************************************
+ */
+void spi0_unidir_poll_block_tx(char *block, int size)
+{
+	int i;
+	char temp;
+	bcm2835_SPI->CSR.bits.TA = 1;
+	for (i = 0; i < size; i++) {
+		bcm2835_SPI->FIFO = block[i];
+		while (bcm2835_SPI->CSR.bits.DONE == 0);
+		temp = (unsigned char)(bcm2835_SPI->FIFO);
+	}
+	bcm2835_SPI->CSR.bits.TA = 0;
+}

@@ -12,7 +12,7 @@
 #define SPI_THREAD_H
 
 #include <QThread>
-//#include <QTimer>
+#include <QTimer>
 
 #include <stdio.h>
 
@@ -52,32 +52,30 @@ public:
 	bool getState(void) {return spi_state;}
 	bool getThreadState(void) {return thread_state;}
 
-	void SPI_Thread_Start(void) {
-		thread_state = true;
-		this->start();
-	}
+	void SPI_Thread_Start(void) {thread_state = true; this->start();}
+	void SPI_Tread_Stop(void) {thread_state = false;}
 
-	void SPI_Tread_Stop(void) {
-		thread_state = false;
-	}
+	int wait_for_ready(void);
 
 signals:
 	void SPI_Tread_DataRDY(qreal v1, qreal v2);
 
-//private slots:
-
+private slots:
+	void w_time_timeout(void);
 
 private:
 	bool spi_state;
 	bool thread_state;
+	bool spi_timeout;
 
 	unsigned short spi_adc_data[2];
 	char out_data[8];
 
-	int reset_spi_device(void);
-
 	t_spi_request spi_request;
 
+	QTimer *w_timer;
+
+	int reset_spi_device(void);
 };
 
 #endif // SPI_THREAD_H

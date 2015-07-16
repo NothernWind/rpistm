@@ -80,6 +80,8 @@ void spi0_unidir_poll_deinit(void);
 unsigned char spi0_unidir_poll_transfer(unsigned char data);
 void spi0_unidir_poll_block_transfer(
 	const char *out_block, char * in_block, int size);
+void spi0_unidir_poll_block_rx(char *block, int size);
+void spi0_unidir_poll_block_tx(char *block, int size);
 
 #ifdef __cplusplus
 }
