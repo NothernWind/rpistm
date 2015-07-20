@@ -93,7 +93,7 @@ void SPI_Thread::run()
 
 		if (wait_for_ready() == -1) {
 			printf("SPI Device Timeout error on step 1\n");
-			thread_state == false;
+			thread_state = false;
 			return;
 		}
 
@@ -106,7 +106,7 @@ void SPI_Thread::run()
 
 		if (wait_for_ready() == -1) {
 			printf("SPI Device Timeout error on step 2\n");
-			thread_state == false;
+			thread_state = false;
 			return;
 		}
 
