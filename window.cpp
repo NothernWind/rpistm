@@ -56,9 +56,9 @@ Window::Window(QWidget *parent)
 
 	spi_device = new SPI_Thread();
 
-	Timer * tmr = new Timer(spi_device);
+	Timer * tmr1 = new Timer(spi_device);
 
-	spi_device->set_timer(tmr);
+	spi_device->set_timer(tmr1);
 
 	connect(single_transfer_btn, SIGNAL(clicked()),
 		this, SLOT(single_transfer_btn_clicked()));
