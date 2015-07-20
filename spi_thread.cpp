@@ -77,7 +77,7 @@ void SPI_Thread::run()
 {
 	while (thread_state == true) {
 
-		spi_wait_timeout = 0;
+//		spi_wait_timeout = 0;
 
 //		// Ожидание готовности устройства
 //		while (bcm2835_GPIO->GPLEV0.bits.GPIO24 == 1) {
