@@ -148,8 +148,6 @@ int SPI_Thread::wait_for_ready()
 		if (timeout >= 1000000) {return -1;}
 	}
 
-	printf("tim counter = %d\n", timeout);
-
 	return 0;
 }
 
