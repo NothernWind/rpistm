@@ -134,8 +134,10 @@ int SPI_Thread::wait_for_ready()
 	while (bcm2835_GPIO->GPLEV0.bits.GPIO24 == 1) {
 		usleep(1);
 		timeout++;
-		if (timeout >= 1000000) return -1;
+		if (timeout >= 1000000) {return -1;}
 	}
+
+	printf("tim counter = %d\n", timeout);
 
 	return 0;
 }
