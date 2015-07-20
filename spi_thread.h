@@ -46,7 +46,7 @@ public:
 	~SPI_Thread();
 
 	void set_timer(Timer *tmr) {
-		timet = tmr;
+		timer = tmr;
 	}
 
 	void run();
