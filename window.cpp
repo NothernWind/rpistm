@@ -54,14 +54,16 @@ Window::Window(QWidget *parent)
 
 	spi_device = new SPI_Thread();
 
+	connect(single_transfer_btn, SIGNAL(clicked()),
+		this, SLOT(single_transfer_btn_clicked()));
+
 	if (spi_device->getState() == false) return;
 
 	single_transfer_btn->setDisabled(false);
 	spi_start_btn->setDisabled(false);
 	led_box->setDisabled(false);
 
-	connect(single_transfer_btn, SIGNAL(clicked()),
-		this, SLOT(single_transfer_btn_clicked()));
+
 
 	single_transfer_btn->setDisabled(false);
 
