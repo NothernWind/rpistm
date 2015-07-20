@@ -60,10 +60,9 @@ public:
 	int wait_for_ready(void);
 
 	void set_time_out(bool t) {
+		printf("void set_time_out(bool t) \n");
 		spi_timeout = t;
 	}
-
-
 
 signals:
 	void SPI_Tread_DataRDY(qreal v1, qreal v2);
