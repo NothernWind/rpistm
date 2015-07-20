@@ -98,7 +98,7 @@ void SPI_Thread::run()
 {
 	if (spi_device_status == false) {
 
-
+		wait_for_ready();
 
 		return;
 	}
