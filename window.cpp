@@ -56,7 +56,7 @@ Window::Window(QWidget *parent)
 
 	if (spi_device->getState() == false) return;
 
-	single_transfer_btn->setDisabled(false);
+//	single_transfer_btn->setDisabled(false);
 	spi_start_btn->setDisabled(false);
 	led_box->setDisabled(false);
 
