@@ -60,6 +60,9 @@ Window::Window(QWidget *parent)
 	spi_start_btn->setDisabled(false);
 	led_box->setDisabled(false);
 
+	connect(single_transfer_btn, SIGNAL(clicked()),
+		this, SLOT(single_transfer_btn_clicked()));
+
 	single_transfer_btn->setDisabled(false);
 
 	connect(led_box, SIGNAL(toggled(bool)),
@@ -71,8 +74,7 @@ Window::Window(QWidget *parent)
 	connect(spi_start_btn, SIGNAL(clicked()),
 		this, SLOT(spi_start_btn_clicked()));
 
-	connect(single_transfer_btn, SIGNAL(clicked()),
-		this, SLOT(single_transfer_btn_clicked()));
+
 
 	connect(ch_display, SIGNAL(changed(const char*)),
 		this, SLOT(lcd_changed(const char*)));
