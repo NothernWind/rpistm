@@ -220,20 +220,3 @@ void Window::lcd_changed(const char * lstr)
 		);
 	GPIO_MARK1_CLR
 }
-
-void Window::timeout_t()
-{
-	spi_data_label->setText("timeout");
-}
-
-/*
- * Исходя из того что уже написано, получаем несколько функций
- *
- * 1. Сброс устройства
- *
- * 2. ожидание готовности устройства
- *
- * 3. обмен данными с устройством
- *
- */
-
