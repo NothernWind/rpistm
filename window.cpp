@@ -160,7 +160,9 @@ unsigned short ADC_values[2];
  */
 void Window::single_transfer_btn_clicked()
 {
-	tmr->start(100);
+//	tmr->start(100);
+
+	spi_device->start();
 
 //	GPIO_MARK1_SET
 

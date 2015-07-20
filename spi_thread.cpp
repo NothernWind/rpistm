@@ -14,31 +14,45 @@ SPI_Thread::SPI_Thread()
 	: spi_state(false)
 	, thread_state(false)
 	, spi_timeout(false)
-	, timer(new Timer())
+	, spi_device_status(false)
+	, timer(new QTimer(this))
 {
-//	w_timer->setSingleShot(true);
-//	connect(w_timer, SIGNAL(timeout()),
-//		this, SLOT(w_timer_timeout()));
+	/*
+	 * Инициализация будет делаться следующим образом.
+	 *
+	 * 1. Тут будем запускать первый поток и дожидаться гтовности
+	 * устройства. Во внешнем классе будем или опрашивать статус
+	 * готовности при помощи функции bool getReadyStatus(void);
+	 * или будем дожидаться сигнала готовности устройства при
+	 * помощи сигнала void deviceready(void);
+	 *
+	 * 2. В конструкторе запускаем инициализацию периферии отдельно
+	 * устанавливаем RST в 0 и запускаем таймер. как только таймер
+	 * сказал что всё устройство сбросилось, запускаем основной поток
+	 * этого класса, и таймер.
+	 *
+	 */
 
-	setPriority(QThread::NormalPriority);
+	timer->setSingleShot(true);
+	connect(timer, SIGNAL(timeout()), this, SLOT(wait_timeout()));
 
-	int error_code = SPI_Thread_Init();
-	if (error_code != 0) {
-		printf("SPI Thread Init Failed. Error %d\n", error_code);
-		return;
-	}
-	spi_state = true;
+//	int error_code = SPI_Thread_Init();
+//	if (error_code != 0) {
+//		printf("SPI Thread Init Failed. Error %d\n", error_code);
+//		return;
+//	}
+//	spi_state = true;
 
-	for (int i = 0; i < 4; i++) {
-		out_data[i] = 0xFF;
-	}
-	out_data[0] = 0x10;
+//	for (int i = 0; i < 4; i++) {
+//		out_data[i] = 0xFF;
+//	}
+//	out_data[0] = 0x10;
 }
 
 //! Нужно обязательно всё это деинициализировать
 SPI_Thread::~SPI_Thread()
 {
-	SPI_Thread_DeInit();
+//	SPI_Thread_DeInit();
 }
 
 /*!
@@ -82,6 +96,13 @@ void SPI_Thread::SPI_Thread_DeInit()
  */
 void SPI_Thread::run()
 {
+	if (spi_device_status == false) {
+
+
+
+		return;
+	}
+
 	int spi_wait_timeout;
 	while (thread_state == true) {
 
@@ -135,7 +156,7 @@ void SPI_Thread::run()
  *
  ********************************************************************
  */
-void SPI_Thread::w_timer_timeout()
+void SPI_Thread::wait_timeout()
 {
 	spi_timeout = true;
 }
@@ -149,19 +170,18 @@ void SPI_Thread::w_timer_timeout()
 int SPI_Thread::wait_for_ready()
 {
 	// Сначала запустим таймер
-	timer->t_start(500);
+	timer->start(100);
+	while(spi_timeout == false);
+	spi_timeout = false;
+	printf("Test OK\n");
 
-	while (bcm2835_GPIO->GPLEV0.bits.GPIO24 == 1) {
-		// А тут будем проверять флаг таймаута
-		if (timer->get_status() == true) {
-			timer->reset_status();
-//			spi_timeout = false;
-			printf("Wait timeout error\n");
-			return -1;
-		}
-	}
 
-	timer->stop();
+//	while (bcm2835_GPIO->GPLEV0.bits.GPIO24 == 1) {
+//		// А тут будем проверять флаг таймаута
+
+//	}
+
+
 	return 0;
 }
 
@@ -179,10 +199,8 @@ int SPI_Thread::reset_spi_device()
 
 	GPIO_MARK1_SET
 	bcm2835_GPIO->GPCLR0 = GPIO_GPCLR0_GP25;
-	timer->t_start(100);
-	while(timer->get_status() == false);
-	timer->reset_status();
-//	spi_timeout = false;
+
+
 	bcm2835_GPIO->GPSET0 = GPIO_GPSET0_GP25;
 
 	if (wait_for_ready() == -1) {

@@ -20,9 +20,6 @@
 #include "bcm2835/gpio.h"
 #include "bcm2835/spi0.h"
 
-class Timer;
-class WDTimer;
-
 typedef union _t_spi_request {
 	unsigned short all;
 	struct {
@@ -68,78 +65,22 @@ signals:
 	void SPI_Tread_DataRDY(qreal v1, qreal v2);
 
 private slots:
-	void w_timer_timeout(void);
+	void wait_timeout(void);
 
 private:
 	bool spi_state;
 	bool thread_state;
 	bool spi_timeout;
+	bool spi_device_status;
 
 	unsigned short spi_adc_data[2];
 	char out_data[8];
 
 	t_spi_request spi_request;
 
-	WDTimer *w_timer;
-
-	Timer *timer;
+	QTimer * timer;
 
 	int reset_spi_device(void);
-};
-
-class Timer : public QThread
-{
-	Q_OBJECT
-public:
-	Timer() : tmout(false), tmr(new QTimer(this)) {
-		tmr->setSingleShot(true);
-		connect(tmr, SIGNAL(timeout()), this, SLOT(timeout()));
-		setPriority(QThread::HighPriority);
-	}
-
-	void run() {tmr->start(delay); exec();}
-
-	void t_start(int value) {delay = value;	start();}
-	void stop(void) {tmr->stop();}
-
-	bool get_status(void) {return tmout;}
-	void reset_status(void) {tmout = false;}
-
-private slots:
-	void timeout(void) {tmout = true;}
-
-private:
-	bool tmout;
-	int delay;
-	QTimer * tmr;
-
-};
-
-/*!
- ********************************************************************
- * \brief
- *
- ********************************************************************
- */
-class WDTimer : public QTimer
-{
-	Q_OBJECT
-public:
-	explicit WDTimer(QObject *parent = 0)
-		: QTimer(parent) {
-		setSingleShot(true);
-		connect(this, SIGNAL(timeout()), SLOT(wdt_timeout()));
-		tmout = false;
-	}
-
-	bool get_status(void) {return tmout;}
-	void reset_status(void) {tmout = false;}
-
-private slots:
-	void wdt_timeout(void) {tmout = true;}
-
-private:
-	bool tmout;
 };
 
 #endif // SPI_THREAD_H
