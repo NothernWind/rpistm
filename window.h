@@ -50,10 +50,7 @@ private slots:
 	void spi_device_value_rdy(qreal, qreal);
 	void spi_dev_stopped(void);
 	void single_transfer_btn_clicked(void);
-
 	void lcd_changed(const char *);
-
-	void timeout_t(void);
 
 private:
 	bool start_state;
@@ -73,8 +70,6 @@ private:
 	CharacterDisplay * ch_display;
 
 	t_spi_request spi_request;
-
-	QTimer *tmr;
 };
 
 #endif // WINDOW_H

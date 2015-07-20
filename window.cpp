@@ -35,7 +35,7 @@ Window::Window(QWidget *parent)
 
 	led_box->setDisabled(true);
 	spi_start_btn->setDisabled(true);
-//	single_transfer_btn->setDisabled(true);
+	single_transfer_btn->setDisabled(true);
 
 	ch_display->write_string(strrr);
 
@@ -48,28 +48,16 @@ Window::Window(QWidget *parent)
     grid->addWidget(single_transfer_btn, 3, 2);
     grid->addWidget(spi_data_label, 5, 0, 1, 3);
 
-
 	adjustSize();
 	setFixedSize(this->size());
 
-
-
 	spi_device = new SPI_Thread();
-
-	Timer * tmr1 = new Timer(spi_device);
-
-	spi_device->set_timer(tmr1);
-
-	connect(single_transfer_btn, SIGNAL(clicked()),
-		this, SLOT(single_transfer_btn_clicked()));
 
 	if (spi_device->getState() == false) return;
 
 	single_transfer_btn->setDisabled(false);
 	spi_start_btn->setDisabled(false);
 	led_box->setDisabled(false);
-
-
 
 	single_transfer_btn->setDisabled(false);
 
@@ -82,14 +70,11 @@ Window::Window(QWidget *parent)
 	connect(spi_start_btn, SIGNAL(clicked()),
 		this, SLOT(spi_start_btn_clicked()));
 
-
+	connect(single_transfer_btn, SIGNAL(clicked()),
+		this, SLOT(single_transfer_btn_clicked()));
 
 	connect(ch_display, SIGNAL(changed(const char*)),
 		this, SLOT(lcd_changed(const char*)));
-
-	tmr = new QTimer(this);
-	tmr->setSingleShot(true);
-	connect(tmr, SIGNAL(timeout()), this, SLOT(timeout_t()));
 }
 
 Window::~Window()
@@ -170,10 +155,6 @@ unsigned short ADC_values[2];
  */
 void Window::single_transfer_btn_clicked()
 {
-//	tmr->start(100);
-
-	spi_device->start();
-
 //	GPIO_MARK1_SET
 
 //	spi_request.bits.rqn = 0x01;

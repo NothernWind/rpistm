@@ -16,39 +16,24 @@ SPI_Thread::SPI_Thread()
 	, spi_timeout(false)
 	, spi_device_status(false)
 {
-	/*
-	 * Инициализация будет делаться следующим образом.
-	 *
-	 * 1. Тут будем запускать первый поток и дожидаться гтовности
-	 * устройства. Во внешнем классе будем или опрашивать статус
-	 * готовности при помощи функции bool getReadyStatus(void);
-	 * или будем дожидаться сигнала готовности устройства при
-	 * помощи сигнала void deviceready(void);
-	 *
-	 * 2. В конструкторе запускаем инициализацию периферии отдельно
-	 * устанавливаем RST в 0 и запускаем таймер. как только таймер
-	 * сказал что всё устройство сбросилось, запускаем основной поток
-	 * этого класса, и таймер.
-	 *
-	 */
 
-//	int error_code = SPI_Thread_Init();
-//	if (error_code != 0) {
-//		printf("SPI Thread Init Failed. Error %d\n", error_code);
-//		return;
-//	}
-//	spi_state = true;
+	int error_code = SPI_Thread_Init();
+	if (error_code != 0) {
+		printf("SPI Thread Init Failed. Error %d\n", error_code);
+		return;
+	}
+	spi_state = true;
 
-//	for (int i = 0; i < 4; i++) {
-//		out_data[i] = 0xFF;
-//	}
-//	out_data[0] = 0x10;
+	for (int i = 0; i < 4; i++) {
+		out_data[i] = 0xFF;
+	}
+	out_data[0] = 0x10;
 }
 
 //! Нужно обязательно всё это деинициализировать
 SPI_Thread::~SPI_Thread()
 {
-//	SPI_Thread_DeInit();
+	SPI_Thread_DeInit();
 }
 
 /*!
@@ -92,13 +77,6 @@ void SPI_Thread::SPI_Thread_DeInit()
  */
 void SPI_Thread::run()
 {
-	if (spi_device_status == false) {
-
-		wait_for_ready();
-
-		return;
-	}
-
 	int spi_wait_timeout;
 	while (thread_state == true) {
 
@@ -152,32 +130,14 @@ void SPI_Thread::run()
  *
  ********************************************************************
  */
-void SPI_Thread::wait_timeout()
-{
-	spi_timeout = true;
-}
-
-/*!
- ********************************************************************
- * \brief
- *
- ********************************************************************
- */
 int SPI_Thread::wait_for_ready()
 {
-	// Сначала запустим таймер
-
-	printf("Start Test\n");
-	timer->start();
-	while(spi_timeout == false);
-	spi_timeout = false;
-	printf("Test OK\n");
-
-
-//	while (bcm2835_GPIO->GPLEV0.bits.GPIO24 == 1) {
-//		// А тут будем проверять флаг таймаута
-
-//	}
+	int timeout = 0;
+	while (bcm2835_GPIO->GPLEV0.bits.GPIO24 == 1) {
+		usleep(1);
+		timeout++;
+		if (timeout >= 1000000) return -1;
+	}
 
 	return 0;
 }
@@ -190,40 +150,21 @@ int SPI_Thread::wait_for_ready()
  */
 int SPI_Thread::reset_spi_device()
 {
-//	int rst_timeout = 0;
-
 	printf("Reset the Device\n");
 
 	GPIO_MARK1_SET
 	bcm2835_GPIO->GPCLR0 = GPIO_GPCLR0_GP25;
-
-
+	usleep(10000);
 	bcm2835_GPIO->GPSET0 = GPIO_GPSET0_GP25;
 
 	if (wait_for_ready() == -1) {
 		printf("Reset Device Error\n");
-
 		return -1;
 	}
 
 	GPIO_MARK1_CLR
 
-//	bcm2835_GPIO->GPCLR0 = GPIO_GPCLR0_GP25;
-//	sleep(1);
-//	bcm2835_GPIO->GPSET0 = GPIO_GPSET0_GP25;
-//	sleep(1);
-
-//	while (bcm2835_GPIO->GPLEV0.bits.GPIO24 == 1) {
-//		rst_timeout++;
-//		if (rst_timeout >= 1000000) {
-//			rst_timeout = 0;
-//			printf("Reset Timeout\n");
-//			return -1;
-//		}
-//	}
-	GPIO_MARK1_SET
 	printf("Device Ready!\n");
-	GPIO_MARK1_CLR
 
 	return 0;
 }
