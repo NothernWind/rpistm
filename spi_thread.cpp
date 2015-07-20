@@ -33,9 +33,6 @@ SPI_Thread::SPI_Thread()
 	 *
 	 */
 
-	timer->setSingleShot(true);
-	connect(timer, SIGNAL(timeout()), this, SLOT(wait_timeout()));
-
 //	int error_code = SPI_Thread_Init();
 //	if (error_code != 0) {
 //		printf("SPI Thread Init Failed. Error %d\n", error_code);
@@ -170,7 +167,9 @@ void SPI_Thread::wait_timeout()
 int SPI_Thread::wait_for_ready()
 {
 	// Сначала запустим таймер
-	timer->start(100);
+
+	printf("Start Test\n");
+	timer->start();
 	while(spi_timeout == false);
 	spi_timeout = false;
 	printf("Test OK\n");
@@ -180,7 +179,6 @@ int SPI_Thread::wait_for_ready()
 //		// А тут будем проверять флаг таймаута
 
 //	}
-
 
 	return 0;
 }

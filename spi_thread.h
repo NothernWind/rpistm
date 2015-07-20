@@ -29,6 +29,8 @@ typedef union _t_spi_request {
 	} bits;
 }t_spi_request;
 
+class Timer;
+
 /*!
  ********************************************************************
  * brief
@@ -61,6 +63,8 @@ public:
 		spi_timeout = t;
 	}
 
+
+
 signals:
 	void SPI_Tread_DataRDY(qreal v1, qreal v2);
 
@@ -78,9 +82,42 @@ private:
 
 	t_spi_request spi_request;
 
-	QTimer * timer;
+	Timer * timer;
+
+
 
 	int reset_spi_device(void);
+};
+
+class Timer : public QThread
+{
+	Q_OBJECT
+
+public:
+	Timer(SPI_Thread * st = 0) {
+		if (st == 0) return;
+		sth = st;
+		tmr = new QTimer(this);
+		tmr->setSingleShot(true);
+		connect(tmr, SIGNAL(timeout()), this, SLOT(timeout()));
+		printf("Thread timer ready\n");
+	}
+
+	void run(void) {
+		printf("thread timer started\n");
+		tmr->start(100);
+		exec();
+	}
+
+private slots:
+	void timeout(void) {
+		printf("thread timer timeout\n");
+		sth->set_time_out(true);
+	}
+
+private:
+	QTimer *tmr;
+	SPI_Thread * sth;
 };
 
 #endif // SPI_THREAD_H
