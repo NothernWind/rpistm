@@ -15,7 +15,7 @@ SPI_Thread::SPI_Thread()
 	, thread_state(false)
 	, spi_timeout(false)
 	, spi_device_status(false)
-	, timer(new QTimer(this))
+	, timer(new Timer(this))
 {
 	/*
 	 * Инициализация будет делаться следующим образом.
