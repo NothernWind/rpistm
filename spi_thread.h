@@ -45,6 +45,10 @@ public:
 
 	~SPI_Thread();
 
+	void set_timer(Timer *tmr) {
+		timet = tmr;
+	}
+
 	void run();
 
 	int SPI_Thread_Init(void);
@@ -93,7 +97,7 @@ class Timer : public QThread
 	Q_OBJECT
 
 public:
-	Timer(SPI_Thread * st = 0) {
+	explicit Timer(SPI_Thread * st = 0) {
 		if (st == 0) return;
 		sth = st;
 		tmr = new QTimer(this);

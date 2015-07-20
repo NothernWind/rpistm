@@ -52,7 +52,13 @@ Window::Window(QWidget *parent)
 	adjustSize();
 	setFixedSize(this->size());
 
+
+
 	spi_device = new SPI_Thread();
+
+	Timer * tmr = new Timer(spi_device);
+
+	spi_device->set_timer(tmr);
 
 	connect(single_transfer_btn, SIGNAL(clicked()),
 		this, SLOT(single_transfer_btn_clicked()));
