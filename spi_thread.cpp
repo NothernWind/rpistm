@@ -13,8 +13,6 @@
 SPI_Thread::SPI_Thread()
 	: spi_state(false)
 	, thread_state(false)
-	, spi_timeout(false)
-	, spi_device_status(false)
 {
 
 	int error_code = SPI_Thread_Init();
