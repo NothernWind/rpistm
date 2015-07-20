@@ -201,21 +201,20 @@ void Window::lcd_changed(const char * lstr)
 		(char *)(&spi_out_data[2]), 2
 		);
 
-	int spi_wait_timeout = 0;
-
-	// Ожидание готовности устройства
-	while (bcm2835_GPIO->GPLEV0.bits.GPIO24 == 1) {
-		spi_wait_timeout++;
-		if (spi_wait_timeout >= 1000000) {
-			spi_wait_timeout = 0;
-			printf("SPI Device Timeout error\n");
-			break;
-		}
+	if (spi_device->wait_for_ready() == -1) {
+		printf("SPI Device Timeout error on step 1\n");
+		return;
 	}
 
 	spi0_unidir_poll_block_transfer(
 		(const char *)(&strrr[0]),
 		(char *)(&tmp_dt[0]), 32
 		);
+
+	if (spi_device->wait_for_ready() == -1) {
+		printf("SPI Device Timeout error on step 2\n");
+		return;
+	}
+
 	GPIO_MARK1_CLR
 }

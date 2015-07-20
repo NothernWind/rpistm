@@ -77,20 +77,6 @@ void SPI_Thread::run()
 {
 	while (thread_state == true) {
 
-//		spi_wait_timeout = 0;
-
-//		// Ожидание готовности устройства
-//		while (bcm2835_GPIO->GPLEV0.bits.GPIO24 == 1) {
-//			spi_wait_timeout++;
-//			if (spi_wait_timeout >= 1000000) {
-//				spi_wait_timeout = 0;
-//				printf("SPI Device Timeout error\n");
-//				printf("Tryin to reset\n");
-//				reset_spi_device();
-//				continue;
-//			}
-//		}
-
 		if (wait_for_ready() == -1) {
 			printf("SPI Device Timeout error on step 1\n");
 			thread_state = false;
@@ -109,19 +95,6 @@ void SPI_Thread::run()
 			thread_state = false;
 			return;
 		}
-
-//		// Ожидание готовности устройства
-//		while (bcm2835_GPIO->GPLEV0.bits.GPIO24 == 1) {
-//			spi_wait_timeout++;
-//			if (spi_wait_timeout >= 1000000) {
-//				spi_wait_timeout = 0;
-//				printf("SPI Device Timeout error\n");
-//				//printf("Tryin to reset\n");
-//				//reset_spi_device();
-//				//continue;
-//				return;
-//			}
-//		}
 
 		// Передача данных
 		spi0_unidir_poll_block_transfer(
