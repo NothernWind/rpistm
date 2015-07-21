@@ -110,7 +110,7 @@ void Window::initilizeSystem()
 		spi_device, SLOT(writeToDisplay(const char*)));
 
 	connect(timer, SIGNAL(timeout()),
-		this, SLOT(continuous_transfer());
+		this, SLOT(continuous_transfer()));
 
 }
 
