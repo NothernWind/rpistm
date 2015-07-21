@@ -101,7 +101,7 @@ void Window::initilizeSystem()
 		this, SLOT(single_transfer_btn_clicked()));
 
 	connect(ch_display, SIGNAL(changed(const char*)),
-		spi_device, SLOT(writeToDisplay(const char*));
+		spi_device, SLOT(writeToDisplay(const char*)));
 
 }
 

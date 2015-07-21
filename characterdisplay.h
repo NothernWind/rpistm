@@ -63,7 +63,7 @@ public:
 		setMinimumSize(n_char * 18 + 20, n_str * 27 + 20);
 		update(); }
 
-	void setDispalyColors(QColor bg, QColor cbg, QColor cfg, QColor f){
+	void setDispalyColors(QColor bg, QColor cbg, QColor cfg, QColor f) {
 		bg_color = bg; cbg_color = cbg; cfg_color = cfg; frame_color = f;
 		update(); }
 
@@ -71,10 +71,10 @@ public:
 
 	void set_blink_interval(int interval){cursor_blink_interval = interval;}
 
-	void write_string(char *str){
-		for(int i = 0; i < 32; i++)
-			display_str[i] = str[i];
-		update(); }
+	void write_string(const char *str) {
+		for(int i = 0; i < 32; i++) display_str[i] = str[i];
+		update();
+	}
 
 	void clear_screen(void){
 		for(int i = 0; i < n_char*n_str;i++)
