@@ -55,6 +55,7 @@ int SPI_Protocol::initializeDevice()
 	if (resetDevice() != 0) return -3;
 
 	printf("Device Ready!\n");
+	return 0;
 }
 
 /*!
