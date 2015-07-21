@@ -2,6 +2,7 @@
 #define SPI_PROTOCOL_H
 
 #include <QObject>
+#include <QThread>
 
 #include <stdio.h>
 
@@ -39,6 +40,7 @@ public:
 	int initializeDevice(void);
 	void deInitializeSPI(void);
 	void getADCValues(unsigned short &adc1, unsigned short &adc2);
+	int waitProcess(void);
 
 public slots:
 	void writeToDisplay(const char * str);

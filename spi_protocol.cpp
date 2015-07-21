@@ -15,6 +15,7 @@ SPI_Protocol::SPI_Protocol(QObject *parent)
 	, device_status(0)
 {
 	device_status = initializeDevice();
+
 }
 
 /*!
@@ -85,14 +86,14 @@ void SPI_Protocol::getADCValues(
 	spi_request.bits.rw = 1;
 	spi0_unidir_poll_block_tx((const char *)(&spi_request), 2);
 
-	if (spi_device->wait_for_ready() == -1) {
+	if (waitProcess() != 0) {
 		printf("SPI Device Timeout error on step 1\n");
 		return;
 	}
 
 	spi0_unidir_poll_block_rx((char *)(&spi_temp_data[0]), 4);
 
-	if (spi_device->wait_for_ready() == -1) {
+	if (waitProcess() != 0) {
 		printf("SPI Device Timeout error on step 2\n");
 		return;
 	}
@@ -100,6 +101,8 @@ void SPI_Protocol::getADCValues(
 	adc1 = spi_temp_data[0];
 	adc2 = spi_temp_data[1];
 }
+
+
 
 /*!
  ********************************************************************
@@ -114,7 +117,7 @@ void SPI_Protocol::writeToDisplay(const char *str)
 
 	spi0_unidir_poll_block_tx((const char *)(&spi_request), 2);
 
-	if (spi_device->wait_for_ready() == -1) {
+	if (waitProcess()  !=0) {
 		printf("SPI Device Timeout error on step 1\n");
 		return;
 	}
@@ -122,10 +125,27 @@ void SPI_Protocol::writeToDisplay(const char *str)
 	spi0_unidir_poll_block_tx(str, 32);
 
 
-	if (spi_device->wait_for_ready() == -1) {
+	if (waitProcess() != 0) {
 		printf("SPI Device Timeout error on step 2\n");
 		return;
 	}
 }
 
+/*!
+ ********************************************************************
+ * \brief
+ *
+ ********************************************************************
+ */
+int SPI_Protocol::waitProcess()
+{
+	int timeout = 0;
+	while (bcm2835_GPIO->GPLEV0.bits.GPIO24 == 1) {
+		QThread::usleep(1);
+		timeout++;
+		if (timeout > 1000000) {return -1;}
+	}
+
+	return 0;
+}
 
