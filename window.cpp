@@ -146,5 +146,5 @@ void Window::single_transfer_btn_clicked()
 	spi_device->getADCValues(adc1, adc2);
 
 	ADC1_control->setValue((qreal)adc1);
-	ADC1_control->setValue((qreal)adc2);
+	ADC2_control->setValue((qreal)adc2);
 }
