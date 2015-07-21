@@ -84,8 +84,6 @@ void SPI_Protocol::getADCValues(
 	spi_request.bits.rqn = 0x01;
 	spi_request.bits.rw = 1;
 
-	printf("send request\n");
-
 	spi0_unidir_poll_block_tx((const char *)(&spi_request), 2);
 
 	if (spi0_wait_process() != 0) {
@@ -93,16 +91,12 @@ void SPI_Protocol::getADCValues(
 		return;
 	}
 
-	printf("success\nrecieve data\n");
-
 	spi0_unidir_poll_block_rx((char *)(&spi_temp_data[0]), 4);
 
 	if (spi0_wait_process() != 0) {
 		printf("SPI Device Timeout error on step 2\n");
 		return;
 	}
-
-	printf("success\n");
 
 	adc1 = spi_temp_data[0];
 	adc2 = spi_temp_data[1];

@@ -151,13 +151,17 @@ void spi0_unidir_poll_block_tx(const char *block, int size)
 {
 	int i;
 	char temp;
+	GPIO_MARK1_CLR
 	bcm2835_SPI->CSR.bits.TA = 1;
 	for (i = 0; i < size; i++) {
 		bcm2835_SPI->FIFO = block[i];
+
 		while (bcm2835_SPI->CSR.bits.DONE == 0);
+
 		temp = (unsigned char)(bcm2835_SPI->FIFO);
 	}
 	bcm2835_SPI->CSR.bits.TA = 0;
+	GPIO_MARK1_SET
 }
 
 /*!
@@ -172,7 +176,7 @@ int spi0_wait_process(void)
 	while (bcm2835_GPIO->GPLEV0.bits.GPIO24 == 1) {
 		usleep(1);
 		timeout++;
-		if (timeout > 1000000) {return -1;}
+		if (timeout > 100000) return -1;
 	}
 
 	return 0;
