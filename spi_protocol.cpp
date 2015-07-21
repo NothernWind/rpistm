@@ -12,10 +12,8 @@
 
 SPI_Protocol::SPI_Protocol(QObject *parent)
 	: QObject(parent)
-	, device_status(0)
 {
 	device_status = initializeDevice();
-
 }
 
 /*!

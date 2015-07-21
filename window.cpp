@@ -24,7 +24,7 @@ Window::Window(QWidget *parent)
 	: QWidget(parent)
 {
 	createWindow();
-
+	initilizeSystem();
 }
 
 Window::~Window(){}
