@@ -16,11 +16,7 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QCheckBox>
-#include <QComboBox>
-#include <QLineEdit>
-#include <QTextEdit>
-#include <QDial>
-#include <QSpinBox>
+#include <QTimer>
 
 #include <stdio.h>
 
@@ -48,9 +44,12 @@ private slots:
 	void toggle_led(bool t);
 	void spi_start_btn_clicked(void);
 	void single_transfer_btn_clicked(void);
+	void continuous_transfer(void);
 
 private:
 	bool start_state;
+
+	unsigned short ADC_Values[2];
 
 	QGridLayout * grid;
 	ADC_Dial * ADC1_dial;
@@ -61,8 +60,8 @@ private:
 	AnalogControl * ADC1_control;
 	AnalogControl * ADC2_control;
 	QPushButton * single_transfer_btn;
-
 	CharacterDisplay * ch_display;
+	QTimer * timer;
 
 	SPI_Protocol * spi_device;
 

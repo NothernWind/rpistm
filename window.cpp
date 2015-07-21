@@ -85,6 +85,10 @@ void Window::createWindow()
  */
 void Window::initilizeSystem()
 {
+	timer = new QTimer(this);
+	timer->setSingleShot(true);
+	start_state = false;
+
 	spi_device = new SPI_Protocol(this);
 
 	if (spi_device->getStatus() != 0) return;
@@ -104,6 +108,9 @@ void Window::initilizeSystem()
 
 	connect(ch_display, SIGNAL(changed(const char*)),
 		spi_device, SLOT(writeToDisplay(const char*)));
+
+	connect(timer, SIGNAL(timeout()),
+		this, SLOT(continuous_transfer());
 
 }
 
@@ -130,6 +137,42 @@ void Window::toggle_led(bool t)
  */
 void Window::spi_start_btn_clicked()
 {
+	if (start_state == false) {
+		spi_start_btn->setText("stop");
+		start_state = true;
+
+		spi_device->getADCValues(ADC_Values[0], ADC_Values[1]);
+
+		ADC1_control->setValue((qreal)ADC_Values[0]);
+		ADC2_control->setValue((qreal)ADC_Values[1]);
+
+		timer->start(20);
+
+	} else {
+		spi_start_btn->setText("start");
+		start_state = false;
+	}
+
+	single_transfer_btn->setDisabled(start_state);
+
+}
+
+/*!
+ ********************************************************************
+ * \brief
+ *
+ ********************************************************************
+ */
+void Window::continuous_transfer()
+{
+	if (start_state == true) {
+		spi_device->getADCValues(ADC_Values[0], ADC_Values[1]);
+
+		ADC1_control->setValue((qreal)ADC_Values[0]);
+		ADC2_control->setValue((qreal)ADC_Values[1]);
+
+		timer->start(20);
+	}
 }
 
 /*!
@@ -148,3 +191,5 @@ void Window::single_transfer_btn_clicked()
 	ADC1_control->setValue((qreal)adc1);
 	ADC2_control->setValue((qreal)adc2);
 }
+
+
