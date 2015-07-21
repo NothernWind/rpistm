@@ -6,24 +6,47 @@
  * \date	05.07.2015
  * \brief
  *
+ * Нужно организовать систему так, чтобы в этом фале небыло никаких
+ * упоминаний вообще про железо. только высокий уровень и вызов готовых
+ * методов. весь протокол запихнуть в отдельный класс. и в отдельном
+ * том классе только создавать методы работы с устройством. кстати
+ * нужно что-то подобное сделать и в самом устройстве, что бы нужно
+ * было только добавлять функционал.
+ *
+ * в этом классе нужно создавать только сам виджет и работать на уровне
+ * сигналов и слотов и не больше.
+ *
  ********************************************************************
  */
 #include "window.h"
 
-char strrr[] = "0123456789ABCDEF0123456789ABCDEF";
-
 Window::Window(QWidget *parent)
 	: QWidget(parent)
-	, start_state(false)
-	, grid(new QGridLayout(this))
-	, led_box(new QCheckBox("LED", this))
-	, spi_start_btn(new QPushButton("start", this))
-	, spi_data_label(new QLabel(this))
-	, ADC1_control(new AnalogControl(this))
-	, ADC2_control(new AnalogControl(this))
-	, single_transfer_btn(new QPushButton("send", this))
-	, ch_display(new CharacterDisplay(this))
 {
+	createWindow();
+
+}
+
+Window::~Window(){}
+
+/*!
+ ********************************************************************
+ * \brief
+ *
+ ********************************************************************
+ */
+void Window::createWindow()
+{
+	grid = new QGridLayout(this);
+
+	led_box = new QCheckBox("LED", this);
+	spi_start_btn = new QPushButton("start", this);
+	spi_data_label = new QLabel(this);
+	ADC1_control = new AnalogControl(this);
+	ADC2_control = new AnalogControl(this);
+	single_transfer_btn = new QPushButton("send", this);
+	ch_display = new CharacterDisplay(this);
+
 	setFont(QFont("Monospace", 10, -1, false));
 	setLayout(grid);
 
@@ -37,35 +60,39 @@ Window::Window(QWidget *parent)
 	spi_start_btn->setDisabled(true);
 	single_transfer_btn->setDisabled(true);
 
-	ch_display->write_string(strrr);
+	ch_display->write_string("Test SPI Device                 ");
 
 	grid->addWidget(ch_display, 0, 0, 1, 3);
 	grid->addWidget(ADC1_control, 1, 0, 4, 1);
 	grid->addWidget(ADC2_control, 1, 1, 4, 1);
 
-    grid->addWidget(led_box, 1, 2);
-    grid->addWidget(spi_start_btn, 2, 2);
-    grid->addWidget(single_transfer_btn, 3, 2);
-    grid->addWidget(spi_data_label, 5, 0, 1, 3);
+	grid->addWidget(led_box, 1, 2);
+	grid->addWidget(spi_start_btn, 2, 2);
+	grid->addWidget(single_transfer_btn, 3, 2);
+	grid->addWidget(spi_data_label, 5, 0, 1, 3);
 
 	adjustSize();
 	setFixedSize(this->size());
+}
 
-	spi_device = new SPI_Thread();
+/*!
+ ********************************************************************
+ * \brief
+ *
+ ********************************************************************
+ */
+void Window::initilizeSystem()
+{
+	spi_device = new SPI_Protocol(this);
 
-	if (spi_device->getState() == false) return;
+	if (spi_device->getStatus() != 0) return;
 
 	single_transfer_btn->setDisabled(false);
 	spi_start_btn->setDisabled(false);
 	led_box->setDisabled(false);
 
-	single_transfer_btn->setDisabled(false);
-
 	connect(led_box, SIGNAL(toggled(bool)),
 		this, SLOT(toggle_led(bool)));
-
-	connect(spi_device, SIGNAL(SPI_Tread_DataRDY(qreal,qreal)),
-		this, SLOT(spi_device_value_rdy(qreal,qreal)));
 
 	connect(spi_start_btn, SIGNAL(clicked()),
 		this, SLOT(spi_start_btn_clicked()));
@@ -74,14 +101,9 @@ Window::Window(QWidget *parent)
 		this, SLOT(single_transfer_btn_clicked()));
 
 	connect(ch_display, SIGNAL(changed(const char*)),
-		this, SLOT(lcd_changed(const char*)));
-}
+		spi_device, SLOT(writeToDisplay(const char*));
 
-Window::~Window()
-{
-	delete spi_device;
 }
-
 
 /*!
  ********************************************************************
@@ -106,46 +128,7 @@ void Window::toggle_led(bool t)
  */
 void Window::spi_start_btn_clicked()
 {
-	if (start_state == false) {
-		spi_start_btn->setText("stop");
-		start_state = true;
-		spi_device->SPI_Thread_Start();
-		single_transfer_btn->setDisabled(true);
-	} else {
-		spi_start_btn->setText("start");
-		start_state = false;
-		spi_device->SPI_Tread_Stop();
-		single_transfer_btn->setDisabled(false);
-	}
-
 }
-
-/*!
- ********************************************************************
- * \brief
- *
- ********************************************************************
- */
-void Window::spi_device_value_rdy(qreal v1, qreal v2)
-{
-	ADC1_control->setValue(v1);
-	ADC2_control->setValue(v2);
-}
-
-/*!
- ********************************************************************
- * \brief
- *
- ********************************************************************
- */
-void Window::spi_dev_stopped()
-{
-	spi_start_btn->setText("start");
-	start_state = false;
-}
-
-char spi_out_data[4] = {0x10, 0x00, 0xFF, 0xFF};
-unsigned short ADC_values[2];
 
 /*!
  ********************************************************************
@@ -155,66 +138,11 @@ unsigned short ADC_values[2];
  */
 void Window::single_transfer_btn_clicked()
 {
-	GPIO_MARK1_SET
+	unsigned short adc1;
+	unsigned short adc2;
 
-	spi_request.bits.rqn = 0x01;
-	spi_request.bits.rw = 1;
+	spi_device->getADCValues(adc1, adc2);
 
-	spi0_unidir_poll_block_transfer(
-		(const char *)(&spi_request),
-		(char *)(&spi_out_data[2]), 2
-		);
-
-	if (spi_device->wait_for_ready() == -1) {
-		printf("SPI Device Timeout error on step 1\n");
-		return;
-	}
-
-	spi0_unidir_poll_block_transfer(
-		(const char *)(&spi_out_data[0]),
-		(char *)(&ADC_values[0]), 4
-		);
-
-	if (spi_device->wait_for_ready() == -1) {
-		printf("SPI Device Timeout error on step 2\n");
-		return;
-	}
-
-	GPIO_MARK1_CLR
-
-	ADC1_control->setValue((qreal)ADC_values[0]);
-	ADC2_control->setValue((qreal)ADC_values[1]);
-}
-
-char tmp_dt[32];
-
-void Window::lcd_changed(const char * lstr)
-{
-	memcpy(strrr, lstr, 32);
-	GPIO_MARK1_SET
-
-	spi_request.bits.rqn = 0x01;
-	spi_request.bits.rw = 0;
-
-	spi0_unidir_poll_block_transfer(
-		(const char *)(&spi_request),
-		(char *)(&spi_out_data[2]), 2
-		);
-
-	if (spi_device->wait_for_ready() == -1) {
-		printf("SPI Device Timeout error on step 1\n");
-		return;
-	}
-
-	spi0_unidir_poll_block_transfer(
-		(const char *)(&strrr[0]),
-		(char *)(&tmp_dt[0]), 32
-		);
-
-	if (spi_device->wait_for_ready() == -1) {
-		printf("SPI Device Timeout error on step 2\n");
-		return;
-	}
-
-	GPIO_MARK1_CLR
+	ADC1_control->setValue((qreal)adc1);
+	ADC1_control->setValue((qreal)adc2);
 }

@@ -11,9 +11,9 @@
 
 #include <stdio.h>
 
-#include "spi0.h"
 #include "bcm2835.h"
 
+#include "spi0.h"
 #include "gpio.h"
 
 t_spi * bcm2835_SPI;
@@ -157,4 +157,22 @@ void spi0_unidir_poll_block_tx(char *block, int size)
 		temp = (unsigned char)(bcm2835_SPI->FIFO);
 	}
 	bcm2835_SPI->CSR.bits.TA = 0;
+}
+
+/*!
+ ********************************************************************
+ * \brief
+ *
+ ********************************************************************
+ */
+int spi0_wait_process()
+{
+	int timeout = 0;
+	while (bcm2835_GPIO->GPLEV0.bits.GPIO24 == 1) {
+		usleep(1);
+		timeout++;
+		if (timeout > 1000000) {return -1;}
+	}
+
+	return 0;
 }

@@ -82,6 +82,7 @@ void spi0_unidir_poll_block_transfer(
 	const char *out_block, char * in_block, int size);
 void spi0_unidir_poll_block_rx(char *block, int size);
 void spi0_unidir_poll_block_tx(char *block, int size);
+int spi0_wait_process();
 
 #ifdef __cplusplus
 }

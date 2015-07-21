@@ -4,8 +4,8 @@ HEADERS += \
     bcm2835/gpio.h \
     bcm2835/spi0.h \
     analogcontrol.h \
-    spi_thread.h \
-    characterdisplay.h
+    characterdisplay.h \
+    spi_protocol.h
 
 SOURCES += \
     window.cpp \
@@ -14,7 +14,7 @@ SOURCES += \
     bcm2835/gpio.c \
     bcm2835/spi0.c \
     analogcontrol.cpp \
-    spi_thread.cpp \
-    characterdisplay.cpp
+    characterdisplay.cpp \
+    spi_protocol.cpp
 
-#QT += widgets
+QT += widgets

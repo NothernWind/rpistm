@@ -27,7 +27,7 @@
 #include "analogcontrol.h"
 #include "characterdisplay.h"
 
-#include "spi_thread.h"
+#include "spi_protocol.h"
 
 class ADC_Dial;
 
@@ -47,10 +47,7 @@ public:
 private slots:
 	void toggle_led(bool t);
 	void spi_start_btn_clicked(void);
-	void spi_device_value_rdy(qreal, qreal);
-	void spi_dev_stopped(void);
 	void single_transfer_btn_clicked(void);
-	void lcd_changed(const char *);
 
 private:
 	bool start_state;
@@ -65,11 +62,13 @@ private:
 	AnalogControl * ADC2_control;
 	QPushButton * single_transfer_btn;
 
-	SPI_Thread * spi_device;
-
 	CharacterDisplay * ch_display;
 
-	t_spi_request spi_request;
+	SPI_Protocol * spi_device;
+
+	void createWindow(void);
+	void initilizeSystem(void);
+
 };
 
 #endif // WINDOW_H
