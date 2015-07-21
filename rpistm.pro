@@ -17,4 +17,4 @@ SOURCES += \
     characterdisplay.cpp \
     spi_protocol.cpp
 
-QT += widgets
+#QT += widgets

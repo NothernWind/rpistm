@@ -10,12 +10,6 @@
 #include "bcm2835/gpio.h"
 #include "bcm2835/spi0.h"
 
-#define P_READ		1
-#define P_WRITE		0
-
-#define RQ_ADC		0x01
-#define
-
 //! Структура запроса к устройству
 typedef union _t_spi_request {
 	unsigned short all;
