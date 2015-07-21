@@ -147,7 +147,7 @@ void spi0_unidir_poll_block_rx(char *block, int size)
  *
  ********************************************************************
  */
-void spi0_unidir_poll_block_tx(char *block, int size)
+void spi0_unidir_poll_block_tx(const char *block, int size)
 {
 	int i;
 	char temp;
