@@ -172,15 +172,17 @@ void spi0_unidir_poll_block_tx(const char *block, int size)
 int spi0_wait_process(void)
 {
 	int timeout = 0;
-	GPIO_MARK1_SET
+
 
 	while (bcm2835_GPIO->GPLEV0.bits.GPIO24 == 1) {
+		if (timeout & 0x01)
+			GPIO_MARK1_SET
+		else GPIO_MARK1_CLR
+
 		usleep(1);
 		timeout++;
 		if (timeout > 100000) return -1;
 	}
-
-	GPIO_MARK1_CLR
 
 	return 0;
 }
