@@ -31,7 +31,7 @@ int SPI_Protocol::resetDevice()
 	usleep(10000);
 	bcm2835_GPIO->GPSET0 = GPIO_GPSET0_GP25;
 
-	if (wait_for_ready() == -1) {
+	if (spi0_wait_process() != 0) {
 		printf("Reset Device Error\n");
 		return -1;
 	}
@@ -86,14 +86,14 @@ void SPI_Protocol::getADCValues(
 	spi_request.bits.rw = 1;
 	spi0_unidir_poll_block_tx((const char *)(&spi_request), 2);
 
-	if (waitProcess() != 0) {
+	if (spi0_wait_process() != 0) {
 		printf("SPI Device Timeout error on step 1\n");
 		return;
 	}
 
 	spi0_unidir_poll_block_rx((char *)(&spi_temp_data[0]), 4);
 
-	if (waitProcess() != 0) {
+	if (spi0_wait_process() != 0) {
 		printf("SPI Device Timeout error on step 2\n");
 		return;
 	}
@@ -117,35 +117,15 @@ void SPI_Protocol::writeToDisplay(const char *str)
 
 	spi0_unidir_poll_block_tx((const char *)(&spi_request), 2);
 
-	if (waitProcess()  !=0) {
+	if (spi0_wait_process()  !=0) {
 		printf("SPI Device Timeout error on step 1\n");
 		return;
 	}
 
 	spi0_unidir_poll_block_tx(str, 32);
 
-
-	if (waitProcess() != 0) {
+	if (spi0_wait_process() != 0) {
 		printf("SPI Device Timeout error on step 2\n");
 		return;
 	}
 }
-
-/*!
- ********************************************************************
- * \brief
- *
- ********************************************************************
- */
-int SPI_Protocol::waitProcess()
-{
-	int timeout = 0;
-	while (bcm2835_GPIO->GPLEV0.bits.GPIO24 == 1) {
-		QThread::usleep(1);
-		timeout++;
-		if (timeout > 1000000) {return -1;}
-	}
-
-	return 0;
-}
-

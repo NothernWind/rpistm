@@ -40,7 +40,6 @@ public:
 	int initializeDevice(void);
 	void deInitializeSPI(void);
 	void getADCValues(unsigned short &adc1, unsigned short &adc2);
-	int waitProcess(void);
 
 public slots:
 	void writeToDisplay(const char * str);
