@@ -46,6 +46,7 @@ void Window::createWindow()
 	ADC2_control = new AnalogControl(this);
 	single_transfer_btn = new QPushButton("send", this);
 	ch_display = new CharacterDisplay(this);
+	slider = new QVExtSlider("slider", this);
 
 	setFont(QFont("Monospace", 10, -1, false));
 	setLayout(grid);
@@ -70,6 +71,7 @@ void Window::createWindow()
 	grid->addWidget(spi_start_btn, 2, 2);
 	grid->addWidget(single_transfer_btn, 3, 2);
 	grid->addWidget(spi_data_label, 5, 0, 1, 3);
+	grid->addWidget(slider, 0, 3, 5, 1);
 
 	adjustSize();
 	setFixedSize(this->size());

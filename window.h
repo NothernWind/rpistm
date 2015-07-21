@@ -22,6 +22,7 @@
 
 #include "analogcontrol.h"
 #include "characterdisplay.h"
+#include "qvextslider.h"
 
 #include "spi_protocol.h"
 
@@ -62,6 +63,7 @@ private:
 	QPushButton * single_transfer_btn;
 	CharacterDisplay * ch_display;
 	QTimer * timer;
+	QVExtSlider * slider;
 
 	SPI_Protocol * spi_device;
 

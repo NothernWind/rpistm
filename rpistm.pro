@@ -5,7 +5,8 @@ HEADERS += \
     bcm2835/spi0.h \
     analogcontrol.h \
     characterdisplay.h \
-    spi_protocol.h
+    spi_protocol.h \
+    qvextslider.h
 
 SOURCES += \
     window.cpp \
@@ -17,4 +18,4 @@ SOURCES += \
     characterdisplay.cpp \
     spi_protocol.cpp
 
-#QT += widgets
+QT += widgets
