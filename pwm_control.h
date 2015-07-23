@@ -17,6 +17,7 @@
 #include <QComboBox>
 #include <QCheckBox>
 #include <QLabel>
+#include <QFrame>
 
 #include "qvextslider.h"
 
@@ -54,6 +55,7 @@ private:
 
 	void create_pwm_ctrl(void);
 
+	QFrame *addSeparator(QFrame::Shape shape = QFrame::HLine, QWidget *parent = 0);
 
 };
 
