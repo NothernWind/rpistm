@@ -52,7 +52,7 @@ void PWM_Control::create_pwm_ctrl()
 
 	dzone->setDisabled(true);
 
-	tick_freq->setFixedWidth(150);
+	tick_freq->setFixedWidth(120);
 
 	psc->setFixedWidth(50);
 	period->setFixedWidth(50);
@@ -96,6 +96,8 @@ void PWM_Control::create_pwm_ctrl()
 	connect(duty, SIGNAL(valueChanged(int)),
 		this, SLOT(pwm_param_changed(int)));
 	connect(dzone, SIGNAL(valueChanged(int)),
+		this, SLOT(pwm_param_changed(int)));
+	connect(fdiv, SIGNAL(currentIndexChanged(int)),
 		this, SLOT(pwm_param_changed(int)));
 	connect(ngen, SIGNAL(toggled(bool)),
 		dzone, SLOT(setEnabled(bool)));
