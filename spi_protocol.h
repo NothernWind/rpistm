@@ -60,7 +60,7 @@ public:
 
 public slots:
 	void writeToDisplay(const char * str);
-	void setPWM_Params(t_spctl_pwm pwm_params);
+	void setPWM_Params(t_spctl_pwm *pwm_params);
 
 private:
 	int device_status;
