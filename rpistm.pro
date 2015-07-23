@@ -20,4 +20,4 @@ SOURCES += \
     spi_protocol.cpp \
     pwm_control.cpp
 
-QT += widgets
+#QT += widgets

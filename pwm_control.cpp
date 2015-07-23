@@ -33,12 +33,14 @@ void PWM_Control::create_pwm_ctrl()
 	period->setRange(0, 65535);
 	dzone->setRange(0, 255);
 
-	grid->addWidget(psc, 0, 0, 9, 1);
-	grid->addWidget(period, 0, 1, 9, 1);
-	grid->addWidget(duty, 0, 2, 9, 1);
-	grid->addWidget(dzone, 0, 3, 9, 1);
+	tick_time->setFixedWidth(50);
 
-	grid->addWidget(addSeparator(QFrame::VLine, this), 0, 4, 9, 1);
+	grid->addWidget(psc, 0, 0, 10, 1);
+	grid->addWidget(period, 0, 1, 10, 1);
+	grid->addWidget(duty, 0, 2, 10, 1);
+	grid->addWidget(dzone, 0, 3, 10, 1);
+
+	grid->addWidget(addSeparator(QFrame::VLine, this), 0, 4, 10, 1);
 
 	grid->addWidget(new QLabel("Fck", this), 0, 5);
 	grid->addWidget(fdiv, 0, 6, 1, 2);
