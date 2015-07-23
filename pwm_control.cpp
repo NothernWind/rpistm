@@ -39,10 +39,10 @@ void PWM_Control::create_pwm_ctrl()
 	grid->addWidget(dzone, 0, 3, 9, 1);
 	grid->addWidget(addSeparator(QFrame::VLine, this), 0, 4, 9, 1);
 
-	grid->addWidget(new QLabel("Fck", this), 0, 4);
-	grid->addWidget(fdiv, 0, 5);
-	grid->addWidget(ngen, 1, 4);
-	grid->addWidget(start, 2, 4);
+	grid->addWidget(new QLabel("Fck", this), 0, 5);
+	grid->addWidget(fdiv, 0, 6);
+	grid->addWidget(ngen, 1, 5);
+	grid->addWidget(start, 2, 5);
 
 	grid->addWidget(new QLabel("F(tim)   = "), 3, 5);
 	grid->addWidget(new QLabel("T(tim)   = "), 4, 5);
