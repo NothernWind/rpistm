@@ -19,7 +19,11 @@
 #include <QLabel>
 #include <QFrame>
 
+#include <math.h>
+
 #include "qvextslider.h"
+
+#define STM32F100xx_Fck		24000000
 
 /*!
  ********************************************************************
@@ -37,6 +41,19 @@ private slots:
 	void pwm_param_changed(int);
 
 private:
+	int tim_div;
+	int tim_psc;
+	int tim_period;
+	int tim_duty;
+	int tim_dzone;
+
+	double f_dts;
+	double f_tim;
+	double t_tim;
+	double f_pwm;
+	double t_pwm;
+	double t_pulse;
+	double t_dzone;
 
 	QGridLayout * grid;
 	QPushButton * start;
@@ -59,6 +76,58 @@ private:
 	void create_pwm_ctrl(void);
 
 	QFrame *addSeparator(QFrame::Shape shape = QFrame::HLine, QWidget *parent = 0);
+
+	void update_values(void) {
+		tim_div = fdiv->currentIndex() + 1;
+		tim_psc = psc->getValue();
+		tim_period = period->getValue();
+		tim_duty = duty->getValue();
+		tim_dzone = dzone->getValue();
+	}
+
+	void calc_values(void) {
+		update_values();
+		f_dts = (double)STM32F100xx_Fck / (double)(tim_div);
+		f_tim = f_dts / (double)tim_psc;
+		t_tim = 1.0f / f_tim;
+
+		t_pwm = (double)(tim_period - 1) * t_tim;
+		f_pwm = 1.0f / t_pwm;
+
+		t_pulse = (double)((tim_period * tim_duty) / 100) * t_tim;
+	}
+
+	QString valueToStr(double value, bool ft) {
+		double v = fabs(value);
+		int p = 0;
+		QStringList sl;
+
+		if (ft) sl << "Hz" << "kHz" << "MHz" << "GHz";
+		else sl << "s" << "ms" << "us" << "ns";
+
+
+		if (v < 1) {
+			while (1) {
+				if (v < 1) v *= 1000, p++;
+				else break;
+			}
+		} else {
+			while(1) {
+				if (v > 999) v /= 1000, p++;
+				else break;
+			}
+		}
+		return QString("%1 %2").arg(v).arg(sl[p]);
+	}
+
+	void update_ctrl(void) {
+		calc_values();
+		tick_freq->setText(valueToStr(f_tim, true));
+		tick_time->setText(valueToStr(t_tim, false));
+		pwm_freq->setText(valueToStr(f_pwm, true));
+		pwm_period->setText(valueToStr(t_pwm, false));
+		pwm_pulse_time->setText(valueToStr(t_pulse, false));
+	}
 
 };
 

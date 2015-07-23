@@ -8,16 +8,19 @@ PWM_Control::PWM_Control(QWidget *parent)
 
 void PWM_Control::pwm_param_changed(int)
 {
-	int period_v;
-	int duty_v;
-	int d_result;
+//	int period_v;
+//	int duty_v;
+//	int d_result;
 
-	period_v = period->getValue();
-	duty_v = duty->getValue();
+//	period_v = period->getValue();
+//	duty_v = duty->getValue();
 
-	d_result = (period_v * duty_v) / 100;
+//	d_result = (period_v * duty_v) / 100;
 
-	pwm_period->setText(QString("%1").arg(d_result));
+//	pwm_pulse_time->setText(QString("%1").arg(d_result));
+
+	update_ctrl();
+
 }
 
 void PWM_Control::create_pwm_ctrl()
@@ -47,6 +50,8 @@ void PWM_Control::create_pwm_ctrl()
 	period->setRange(0, 65535);
 	dzone->setRange(0, 255);
 
+	dzone->setDisabled(true);
+
 	tick_time->setFixedWidth(50);
 
 	psc->setFixedWidth(50);
@@ -75,10 +80,10 @@ void PWM_Control::create_pwm_ctrl()
 	grid->addWidget(new QLabel("T(pulse) = "), 8, 5, 1, 2);
 	grid->addWidget(new QLabel("T(dzone) = "), 9, 5, 1, 2);
 
-	grid->addWidget(tick_time, 4, 7);
-	grid->addWidget(tick_freq, 5, 7);
-	grid->addWidget(pwm_period, 6, 7);
-	grid->addWidget(pwm_freq, 7, 7);
+	grid->addWidget(tick_freq, 4, 7);
+	grid->addWidget(tick_time, 5, 7);
+	grid->addWidget(pwm_freq, 6, 7);
+	grid->addWidget(pwm_period, 7, 7);
 	grid->addWidget(pwm_pulse_time, 8, 7);
 	grid->addWidget(pwm_dzone_time, 9, 7);
 
@@ -92,6 +97,8 @@ void PWM_Control::create_pwm_ctrl()
 		this, SLOT(pwm_param_changed(int)));
 	connect(dzone, SIGNAL(valueChanged(int)),
 		this, SLOT(pwm_param_changed(int)));
+	connect(ngen, SIGNAL(toggled(bool)),
+		dzone, SLOT(setEnabled(bool)));
 
 }
 
