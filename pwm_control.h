@@ -97,7 +97,7 @@ private:
 		f_tim = f_dts / (double)(tim_psc + 1);
 		t_tim = 1.0f / f_tim;
 
-		t_pwm = (double)(tim_period - 1) * t_tim;
+		t_pwm = (double)(tim_period) * t_tim;
 		if (t_pwm > 0) f_pwm = 1.0f / t_pwm;
 		else f_pwm = 0;
 
@@ -111,7 +111,7 @@ private:
 			"f_pwm: %f\n"
 			"f_pulse: %f\n",
 
-			f_dts, t_tim, f_tim, t_pwm, f_pwm, t_pulse
+			f_dts, f_tim, t_tim, t_pwm, f_pwm, t_pulse
 		);
 
 	}
@@ -125,10 +125,12 @@ private:
 		else sl << "s" << "ms" << "us" << "ns" << "null" << "one";
 
 
-		if (v < 1) {
-			while (v < 1) { v *= 1000; p++;}
-		} else {
-			while (v > 999) {v /= 1000; p++;}
+		if (v != 0) {
+			if (v < 1) {
+				while (v < 1) { v *= 1000; p++;}
+			} else {
+				while (v > 999) {v /= 1000; p++;}
+			}
 		}
 
 		printf("p = %d\n", p);
