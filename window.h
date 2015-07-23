@@ -17,12 +17,15 @@
 #include <QLabel>
 #include <QCheckBox>
 #include <QTimer>
+#include <QGroupBox>
+#include <QComboBox>
 
 #include <stdio.h>
 
 #include "analogcontrol.h"
 #include "characterdisplay.h"
 #include "qvextslider.h"
+#include "pwm_control.h"
 
 #include "spi_protocol.h"
 
@@ -62,8 +65,8 @@ private:
 	AnalogControl * ADC2_control;
 	QPushButton * single_transfer_btn;
 	CharacterDisplay * ch_display;
+	PWM_Control * pwmctrl;
 	QTimer * timer;
-	QVExtSlider * slider;
 
 	SPI_Protocol * spi_device;
 
