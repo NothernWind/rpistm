@@ -33,6 +33,9 @@ class PWM_Control : public QWidget
 public:
 	explicit PWM_Control(QWidget *parent = 0);
 
+private slots:
+	void pwm_param_changed(int);
+
 private:
 
 	QGridLayout * grid;

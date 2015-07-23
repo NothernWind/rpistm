@@ -6,6 +6,20 @@ PWM_Control::PWM_Control(QWidget *parent)
 	create_pwm_ctrl();
 }
 
+void PWM_Control::pwm_param_changed(int)
+{
+	int period_v;
+	int duty_v;
+	int d_result;
+
+	period_v = period->getValue();
+	duty_v = duty->getValue();
+
+	d_result = (period_v * duty_v) / 100;
+
+	pwm_period->setText(QString("%1").arg(d_result));
+}
+
 void PWM_Control::create_pwm_ctrl()
 {
 	grid = new QGridLayout(this);
@@ -69,6 +83,15 @@ void PWM_Control::create_pwm_ctrl()
 	grid->addWidget(pwm_dzone_time, 9, 7);
 
 	grid->setRowStretch(0, 1);
+
+	connect(psc, SIGNAL(valueChanged(int)),
+		this, SLOT(pwm_param_changed(int)));
+	connect(period, SIGNAL(valueChanged(int)),
+		this, SLOT(pwm_param_changed(int)));
+	connect(duty, SIGNAL(valueChanged(int)),
+		this, SLOT(pwm_param_changed(int)));
+	connect(dzone, SIGNAL(valueChanged(int)),
+		this, SLOT(pwm_param_changed(int)));
 
 }
 
