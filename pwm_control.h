@@ -20,6 +20,7 @@
 #include <QFrame>
 
 #include <math.h>
+#include <stdio.h>
 
 #include "qvextslider.h"
 
@@ -78,6 +79,9 @@ private:
 	QFrame *addSeparator(QFrame::Shape shape = QFrame::HLine, QWidget *parent = 0);
 
 	void update_values(void) {
+
+		printf("update values\n");
+
 		tim_div = fdiv->currentIndex() + 1;
 		tim_psc = psc->getValue();
 		tim_period = period->getValue();
@@ -87,6 +91,8 @@ private:
 
 	void calc_values(void) {
 		update_values();
+
+		printf("calculate values\n");
 		f_dts = (double)STM32F100xx_Fck / (double)(tim_div);
 		f_tim = f_dts / (double)tim_psc;
 		t_tim = 1.0f / f_tim;
@@ -103,8 +109,8 @@ private:
 		int p = 0;
 		QStringList sl;
 
-		if (ft) sl << "Hz" << "kHz" << "MHz" << "GHz";
-		else sl << "s" << "ms" << "us" << "ns";
+		if (ft) sl << "Hz" << "kHz" << "MHz" << "GHz" << "null" << "one";;
+		else sl << "s" << "ms" << "us" << "ns" << "null" << "one";
 
 
 		if (v < 1) {
@@ -112,6 +118,9 @@ private:
 		} else {
 			while (v > 999) {v /= 1000; p++;}
 		}
+
+		printf("p = %d\n", p);
+
 		return QString("%1 %2").arg(v).arg(sl[p]);
 	}
 
