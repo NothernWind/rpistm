@@ -52,7 +52,7 @@ void PWM_Control::create_pwm_ctrl()
 
 	dzone->setDisabled(true);
 
-	tick_time->setFixedWidth(50);
+	tick_freq->setFixedWidth(150);
 
 	psc->setFixedWidth(50);
 	period->setFixedWidth(50);

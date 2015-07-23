@@ -80,8 +80,6 @@ private:
 
 	void update_values(void) {
 
-		printf("update values\n");
-
 		tim_div = fdiv->currentIndex() + 1;
 		tim_psc = psc->getValue();
 		tim_period = period->getValue();
@@ -92,7 +90,6 @@ private:
 	void calc_values(void) {
 		update_values();
 
-		printf("calculate values\n");
 		f_dts = (double)STM32F100xx_Fck / (double)(tim_div);
 		f_tim = f_dts / (double)(tim_psc + 1);
 		t_tim = 1.0f / f_tim;
@@ -102,18 +99,6 @@ private:
 		else f_pwm = 0;
 
 		t_pulse = (double)((tim_period * tim_duty) / 100) * t_tim;
-
-		printf(
-			"f_dts: %f\n"
-			"f_tim: %f\n"
-			"t_tim: %f\n"
-			"t_pwm: %f\n"
-			"f_pwm: %f\n"
-			"f_pulse: %f\n",
-
-			f_dts, f_tim, t_tim, t_pwm, f_pwm, t_pulse
-		);
-
 	}
 
 	QString valueToStr(double value, bool ft) {
@@ -132,8 +117,6 @@ private:
 				while (v > 999) {v /= 1000; p++;}
 			}
 		}
-
-		printf("p = %d\n", p);
 
 		return QString("%1 %2").arg(v).arg(sl[p]);
 	}
