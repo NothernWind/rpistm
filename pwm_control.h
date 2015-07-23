@@ -109,7 +109,7 @@ private:
 		int p = 0;
 		QStringList sl;
 
-		if (ft) sl << "Hz" << "kHz" << "MHz" << "GHz" << "null" << "one";;
+		if (ft) sl << "Hz" << "kHz" << "MHz" << "GHz" << "null" << "one";
 		else sl << "s" << "ms" << "us" << "ns" << "null" << "one";
 
 
