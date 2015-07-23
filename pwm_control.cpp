@@ -190,7 +190,7 @@ void PWM_Control::calc_values() {
 	f_tim = f_dts / (double)(tim_psc + 1);
 	t_tim = 1.0f / f_tim;
 
-	t_pwm = (double)(tim_period) * t_tim;
+	t_pwm = (double)(tim_period + 1) * t_tim;
 	if (t_pwm > 0) f_pwm = 1.0f / t_pwm;
 	else f_pwm = 0;
 
