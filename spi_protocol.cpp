@@ -129,3 +129,14 @@ void SPI_Protocol::writeToDisplay(const char *str)
 		return;
 	}
 }
+
+/*!
+ ********************************************************************
+ * \brief
+ *
+ ********************************************************************
+ */
+void SPI_Protocol::setPWM_Params(t_spctl_pwm pwm_params)
+{
+
+}

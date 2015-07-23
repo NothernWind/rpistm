@@ -20,6 +20,23 @@ typedef union _t_spi_request {
 	} bits;
 } t_spi_request;
 
+typedef union _t_spctl_tim {
+	unsigned short all;
+	struct {
+		unsigned CK_Div:2;
+		unsigned CH1N_En:1;
+		unsigned :5;
+		unsigned DT:8;
+	}bits;
+} t_spctl_tim;
+
+typedef struct _t_spctl_pwm{
+	unsigned short param;
+	unsigned short div;
+	unsigned short period;
+	unsigned short duty;
+} t_spctl_pwm;
+
 /*!
  ********************************************************************
  * \brief
@@ -43,6 +60,7 @@ public:
 
 public slots:
 	void writeToDisplay(const char * str);
+	void setPWM_Params(t_spctl_pwm pwm_params);
 
 private:
 	int device_status;

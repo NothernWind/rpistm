@@ -1,3 +1,13 @@
+/*!
+ ********************************************************************
+ * \file
+ * \author
+ * \version
+ * \date
+ * \brief
+ *
+ ********************************************************************
+ */
 #include "pwm_control.h"
 
 PWM_Control::PWM_Control(QWidget *parent)
@@ -6,25 +16,47 @@ PWM_Control::PWM_Control(QWidget *parent)
 	create_pwm_ctrl();
 }
 
+/*!
+ ********************************************************************
+ * \brief
+ *
+ ********************************************************************
+ */
 void PWM_Control::pwm_param_changed(int)
 {
-//	int period_v;
-//	int duty_v;
-//	int d_result;
-
-//	period_v = period->getValue();
-//	duty_v = duty->getValue();
-
-//	d_result = (period_v * duty_v) / 100;
-
-//	pwm_pulse_time->setText(QString("%1").arg(d_result));
-
-	update_ctrl();
-
+//	update_values();
+//	calc_values();
+//	update_ctrl();
 }
 
+/*!
+ ********************************************************************
+ * \brief
+ *
+ ********************************************************************
+ */
+void PWM_Control::start_clicked()
+{
+	if (start_state == false) {
+		start->setText("stop");
+		start_state = true;
+	} else {
+		start->setText("start");
+		start_state = false;
+	}
+	emit started(start_state);
+}
+
+/*!
+ ********************************************************************
+ * \brief
+ *
+ ********************************************************************
+ */
 void PWM_Control::create_pwm_ctrl()
 {
+	start_state = false;
+
 	grid = new QGridLayout(this);
 
 	psc = new QVExtSlider("psc", this);
@@ -34,6 +66,7 @@ void PWM_Control::create_pwm_ctrl()
 	fdiv = new QComboBox(this);
 	ngen = new QCheckBox("neg.en", this);
 	start = new QPushButton("start", this);
+	single_rq = new QPushButton("set", this);
 
 	tick_time = new QLabel("0", this);
 	tick_freq = new QLabel("0", this);
@@ -70,6 +103,7 @@ void PWM_Control::create_pwm_ctrl()
 	grid->addWidget(fdiv, 0, 6, 1, 2);
 	grid->addWidget(ngen, 0, 8);
 	grid->addWidget(start, 1, 5, 1, 2);
+	grid->addWidget(single_rq, 1, 7, 1, 2);
 
 	grid->addWidget(addSeparator(QFrame::HLine, this), 2, 5, 1, 3);
 
@@ -101,9 +135,16 @@ void PWM_Control::create_pwm_ctrl()
 		this, SLOT(pwm_param_changed(int)));
 	connect(ngen, SIGNAL(toggled(bool)),
 		dzone, SLOT(setEnabled(bool)));
-
+	connect(start, SIGNAL(clicked()),
+		this, SLOT(start_clicked()));
 }
 
+/*!
+ ********************************************************************
+ * \brief
+ *
+ ********************************************************************
+ */
 QFrame *PWM_Control::addSeparator(QFrame::Shape shape, QWidget *parent)
 {
 	QFrame *f = new QFrame(parent);
@@ -112,4 +153,110 @@ QFrame *PWM_Control::addSeparator(QFrame::Shape shape, QWidget *parent)
 	f->setMidLineWidth(0);
 	f->setFrameShape(shape);
 	return f;
+}
+
+/*!
+ ********************************************************************
+ * \brief
+ *
+ ********************************************************************
+ */
+void PWM_Control::update_values() {
+
+	tim_div = fdiv->currentIndex() + 1;
+	tim_psc = psc->getValue();
+	tim_period = period->getValue();
+	tim_duty = duty->getValue();
+	tim_dzone = dzone->getValue();
+}
+
+/*!
+ ********************************************************************
+ * \brief
+ *
+ ********************************************************************
+ */
+void PWM_Control::calc_values() {
+	f_dts = (double)STM32F100xx_Fck / (double)(tim_div);
+	f_tim = f_dts / (double)(tim_psc + 1);
+	t_tim = 1.0f / f_tim;
+
+	t_pwm = (double)(tim_period) * t_tim;
+	if (t_pwm > 0) f_pwm = 1.0f / t_pwm;
+	else f_pwm = 0;
+
+	pwm_duty = (tim_period * tim_duty) / 100;
+
+	t_pulse = ((double)pwm_duty) * t_tim;
+}
+
+/*!
+ ********************************************************************
+ * \brief
+ *
+ ********************************************************************
+ */
+QString PWM_Control::valueToStr(double value, bool ft) {
+	double v = fabs(value);
+	int p = 0;
+	QStringList sl;
+
+	if (ft) sl << "Hz" << "kHz" << "MHz" << "GHz" << "!";
+	else sl << "s" << "ms" << "us" << "ns" << "!";
+
+
+	if (v != 0) {
+		if (ft == false) {
+			while (v < 1) { v *= 1000; p++;}
+		} else {
+			while (v > 999) {v /= 1000; p++;}
+		}
+	}
+
+	return QString("%1 %2").arg(v).arg(sl[p < 4 ? p : 4]);
+}
+
+/*!
+ ********************************************************************
+ * \brief
+ *
+ ********************************************************************
+ */
+void PWM_Control::update_ctrl() {
+	tick_freq->setText(valueToStr(f_tim, true));
+	tick_time->setText(valueToStr(t_tim, false));
+	pwm_freq->setText(valueToStr(f_pwm, true));
+	pwm_period->setText(valueToStr(t_pwm, false));
+	pwm_pulse_time->setText(valueToStr(t_pulse, false));
+}
+
+/*!
+ ********************************************************************
+ * \brief
+ *
+ ********************************************************************
+ */
+void PWM_Control::send_pwm_request()
+{
+	update_values();
+	calc_values();
+	update_ctrl();
+
+	if (ngen->isChecked() == true) {
+		header.bits.CH1N_En = 1;
+		header.bits.DT = tim_dzone;
+	} else {
+		header.bits.CH1N_En = 0;
+		header.bits.DT = 0;
+	}
+
+	header.bits.CK_Div = fdiv->currentIndex();
+
+	paket.param = header.all;
+
+	paket.div = tim_psc;
+	paket.period = tim_period;
+	paket.duty = pwm_duty;
+
+	spi_ptcl->setPWM_Params(paket);
 }
