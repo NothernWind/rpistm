@@ -111,7 +111,7 @@ private:
 
 
 		if (v != 0) {
-			if (v < 1) {
+			if (ft == false) {
 				while (v < 1) { v *= 1000; p++;}
 			} else {
 				while (v > 999) {v /= 1000; p++;}
