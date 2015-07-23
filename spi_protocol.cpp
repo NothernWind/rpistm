@@ -138,7 +138,7 @@ void SPI_Protocol::writeToDisplay(const char *str)
  */
 void SPI_Protocol::setPWM_Params(t_spctl_pwm *pwm_params)
 {
-	spi_request.bits.rqn = 0x01;
+	spi_request.bits.rqn = 0x04;
 	spi_request.bits.rw = 0;
 
 	spi0_unidir_poll_block_tx((const char *)(&spi_request), 2);
