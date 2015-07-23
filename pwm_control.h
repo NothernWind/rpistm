@@ -92,7 +92,8 @@ private:
 		t_tim = 1.0f / f_tim;
 
 		t_pwm = (double)(tim_period - 1) * t_tim;
-		f_pwm = 1.0f / t_pwm;
+		if (t_pwm > 0) f_pwm = 1.0f / t_pwm;
+		else f_pwm = 0;
 
 		t_pulse = (double)((tim_period * tim_duty) / 100) * t_tim;
 	}
@@ -107,15 +108,9 @@ private:
 
 
 		if (v < 1) {
-			while (1) {
-				if (v < 1) v *= 1000, p++;
-				else break;
-			}
+			while (v < 1) { v *= 1000; p++;}
 		} else {
-			while(1) {
-				if (v > 999) v /= 1000, p++;
-				else break;
-			}
+			while (v > 999) {v /= 1000; p++;}
 		}
 		return QString("%1 %2").arg(v).arg(sl[p]);
 	}
