@@ -50,6 +50,7 @@ private slots:
 	void pwm_param_changed(int);
 	void start_clicked(void);
 	void single_slicked(void);
+	void timer_update(void);
 
 private:
 	bool start_state;
@@ -90,6 +91,8 @@ private:
 	QLabel * pwm_freq;			//!< Частота ШИМ
 	QLabel * pwm_pulse_time;	//!< Длительность импульса
 	QLabel * pwm_dzone_time;
+
+	QTimer * timer;
 
 	SPI_Protocol * spi_ptcl;
 

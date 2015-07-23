@@ -40,6 +40,7 @@ void PWM_Control::start_clicked()
 {
 	if (start_state == false) {
 		start->setText("stop");
+		timer->start(20);
 		start_state = true;
 	} else {
 		start->setText("start");
@@ -75,6 +76,11 @@ void PWM_Control::create_pwm_ctrl()
 	pwm_freq = new QLabel("0", this);
 	pwm_pulse_time = new QLabel("0", this);
 	pwm_dzone_time = new QLabel("0", this);
+
+	timer = new QTimer(this);
+	timer->setSingleShot(true);
+	connect(timer, SIGNAL(timeout()),
+		this, SLOT(timer_update()));
 
 	QStringList list;
 	list << "/1" << "/2" << "/4";
@@ -268,4 +274,12 @@ void PWM_Control::single_slicked()
 {
 	send_pwm_request();
 	spi_ptcl->setPWM_Params(&paket);
+}
+
+void PWM_Control::timer_update()
+{
+	if (start_state == true) {
+		send_pwm_request();
+		spi_ptcl->setPWM_Params(&paket);
+	}
 }
