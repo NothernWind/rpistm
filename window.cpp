@@ -76,8 +76,6 @@ void Window::createWindow()
 
 	adjustSize();
 	setFixedSize(this->size());
-
-
 }
 
 /*!

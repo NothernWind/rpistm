@@ -29,6 +29,6 @@ void PWM_Control::create_pwm_ctrl()
 	grid->addWidget(new QLabel("Fck", this), 1, 0);
 	grid->addWidget(fdiv, 1, 1);
 	grid->addWidget(ngen, 1, 2, 1, 2);
-	grid->addWidget(star, 2, 0, 1, 2);
+	grid->addWidget(start, 2, 0, 1, 2);
 
 }
