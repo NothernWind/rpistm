@@ -35,6 +35,11 @@ void PWM_Control::create_pwm_ctrl()
 
 	tick_time->setFixedWidth(50);
 
+	psc->setFixedWidth(50);
+	period->setFixedWidth(50);
+	duty->setFixedWidth(50);
+	dzone->setFixedWidth(50);
+
 	grid->addWidget(psc, 0, 0, 10, 1);
 	grid->addWidget(period, 0, 1, 10, 1);
 	grid->addWidget(duty, 0, 2, 10, 1);
