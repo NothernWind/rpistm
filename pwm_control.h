@@ -112,7 +112,7 @@ private:
 			"f_pulse: %f\n",
 
 			f_dts, t_tim, f_tim, t_pwm, f_pwm, t_pulse
-		)
+		);
 
 	}
 
