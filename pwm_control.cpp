@@ -37,26 +37,29 @@ void PWM_Control::create_pwm_ctrl()
 	grid->addWidget(period, 0, 1, 9, 1);
 	grid->addWidget(duty, 0, 2, 9, 1);
 	grid->addWidget(dzone, 0, 3, 9, 1);
+
 	grid->addWidget(addSeparator(QFrame::VLine, this), 0, 4, 9, 1);
 
 	grid->addWidget(new QLabel("Fck", this), 0, 5);
-	grid->addWidget(fdiv, 0, 6);
-	grid->addWidget(ngen, 1, 5);
-	grid->addWidget(start, 2, 5);
+	grid->addWidget(fdiv, 0, 6, 1, 2);
+	grid->addWidget(ngen, 1, 5, 1, 3);
+	grid->addWidget(start, 2, 5, 1, 3);
 
-	grid->addWidget(new QLabel("F(tim)   = "), 3, 5);
-	grid->addWidget(new QLabel("T(tim)   = "), 4, 5);
-	grid->addWidget(new QLabel("F(PWM)   = "), 5, 5);
-	grid->addWidget(new QLabel("T(PWM)   = "), 6, 5);
-	grid->addWidget(new QLabel("T(pulse) = "), 7, 5);
-	grid->addWidget(new QLabel("T(dzone) = "), 8, 5);
+	grid->addWidget(addSeparator(QFrame::HLine, this), 3, 5, 1, 3);
 
-	grid->addWidget(tick_time, 3, 6);
-	grid->addWidget(tick_freq, 4, 6);
-	grid->addWidget(pwm_period, 5, 6);
-	grid->addWidget(pwm_freq, 6, 6);
-	grid->addWidget(pwm_pulse_time, 7, 6);
-	grid->addWidget(pwm_dzone_time, 8, 6);
+	grid->addWidget(new QLabel("F(tim)   = "), 4, 5, 1, 2);
+	grid->addWidget(new QLabel("T(tim)   = "), 5, 5, 1, 2);
+	grid->addWidget(new QLabel("F(PWM)   = "), 6, 5, 1, 2);
+	grid->addWidget(new QLabel("T(PWM)   = "), 7, 5, 1, 2);
+	grid->addWidget(new QLabel("T(pulse) = "), 8, 5, 1, 2);
+	grid->addWidget(new QLabel("T(dzone) = "), 9, 5, 1, 2);
+
+	grid->addWidget(tick_time, 4, 7);
+	grid->addWidget(tick_freq, 5, 7);
+	grid->addWidget(pwm_period, 6, 7);
+	grid->addWidget(pwm_freq, 7, 7);
+	grid->addWidget(pwm_pulse_time, 8, 7);
+	grid->addWidget(pwm_dzone_time, 9, 7);
 
 	grid->setRowStretch(0, 1);
 
