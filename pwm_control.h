@@ -94,7 +94,7 @@ private:
 
 		printf("calculate values\n");
 		f_dts = (double)STM32F100xx_Fck / (double)(tim_div);
-		f_tim = f_dts / (double)tim_psc;
+		f_tim = f_dts / (double)(tim_psc + 1);
 		t_tim = 1.0f / f_tim;
 
 		t_pwm = (double)(tim_period - 1) * t_tim;
@@ -102,6 +102,18 @@ private:
 		else f_pwm = 0;
 
 		t_pulse = (double)((tim_period * tim_duty) / 100) * t_tim;
+
+		printf(
+			"f_dts: %f\n"
+			"f_tim: %f\n"
+			"t_tim: %f\n"
+			"t_pwm: %f\n"
+			"f_pwm: %f\n"
+			"f_pulse: %f\n",
+
+			f_dts, t_tim, f_tim, t_pwm, f_pwm, t_pulse
+		)
+
 	}
 
 	QString valueToStr(double value, bool ft) {
