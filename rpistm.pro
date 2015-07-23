@@ -20,4 +20,7 @@ SOURCES += \
     spi_protocol.cpp \
     pwm_control.cpp
 
-QT += widgets
+win32 {
+	QT += widgets
+	error("Can't build this project on win32")
+}

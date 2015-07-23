@@ -24,9 +24,10 @@ PWM_Control::PWM_Control(QWidget *parent)
  */
 void PWM_Control::pwm_param_changed(int)
 {
-//	update_values();
-//	calc_values();
-//	update_ctrl();
+	if (start_state == true) return;
+	update_values();
+	calc_values();
+	update_ctrl();
 }
 
 /*!
@@ -105,14 +106,21 @@ void PWM_Control::create_pwm_ctrl()
 	grid->addWidget(start, 1, 5, 1, 2);
 	grid->addWidget(single_rq, 1, 7, 1, 2);
 
-	grid->addWidget(addSeparator(QFrame::HLine, this), 2, 5, 1, 3);
+	grid->addWidget(addSeparator(QFrame::HLine, this), 2, 5, 1, 4);
 
-	grid->addWidget(new QLabel("F(tim)   = "), 3, 5, 1, 2);
-	grid->addWidget(new QLabel("T(tim)   = "), 4, 5, 1, 2);
-	grid->addWidget(new QLabel("F(PWM)   = "), 5, 5, 1, 2);
-	grid->addWidget(new QLabel("T(PWM)   = "), 6, 5, 1, 2);
-	grid->addWidget(new QLabel("T(pulse) = "), 7, 5, 1, 2);
-	grid->addWidget(new QLabel("T(dzone) = "), 8, 5, 1, 2);
+	QStringList l_list;
+	l_list << "F(tim)   = " << "T(tim)   = " << "F(PWM)   = "
+		<< "T(PWM)   = " << "T(pulse) = " << "T(dzone) = ";
+	for (int i = 0; i < l_list.size(); i++) {
+		grid->addWidget(new QLabel(l_list[i], this), i + 3, 5, 1, 2);
+	}
+
+//	grid->addWidget(new QLabel("F(tim)   = "), 3, 5, 1, 2);
+//	grid->addWidget(new QLabel("T(tim)   = "), 4, 5, 1, 2);
+//	grid->addWidget(new QLabel("F(PWM)   = "), 5, 5, 1, 2);
+//	grid->addWidget(new QLabel("T(PWM)   = "), 6, 5, 1, 2);
+//	grid->addWidget(new QLabel("T(pulse) = "), 7, 5, 1, 2);
+//	grid->addWidget(new QLabel("T(dzone) = "), 8, 5, 1, 2);
 
 	grid->addWidget(tick_freq, 3, 7, 1, 2);
 	grid->addWidget(tick_time, 4, 7, 1, 2);
