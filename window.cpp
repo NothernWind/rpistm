@@ -96,7 +96,7 @@ void Window::initilizeSystem()
 	start_state = false;
 
 	spi_device = new SPI_Protocol(this);
-
+	pwmctrl->setProtocol(spi_device);
 	if (spi_device->getStatus() != 0) return;
 
 	single_transfer_btn->setDisabled(false);

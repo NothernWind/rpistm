@@ -49,6 +49,7 @@ signals:
 private slots:
 	void pwm_param_changed(int);
 	void start_clicked(void);
+	void single_slicked(void);
 
 private:
 	bool start_state;

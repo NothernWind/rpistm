@@ -115,13 +115,6 @@ void PWM_Control::create_pwm_ctrl()
 		grid->addWidget(new QLabel(l_list[i], this), i + 3, 5, 1, 2);
 	}
 
-//	grid->addWidget(new QLabel("F(tim)   = "), 3, 5, 1, 2);
-//	grid->addWidget(new QLabel("T(tim)   = "), 4, 5, 1, 2);
-//	grid->addWidget(new QLabel("F(PWM)   = "), 5, 5, 1, 2);
-//	grid->addWidget(new QLabel("T(PWM)   = "), 6, 5, 1, 2);
-//	grid->addWidget(new QLabel("T(pulse) = "), 7, 5, 1, 2);
-//	grid->addWidget(new QLabel("T(dzone) = "), 8, 5, 1, 2);
-
 	grid->addWidget(tick_freq, 3, 7, 1, 2);
 	grid->addWidget(tick_time, 4, 7, 1, 2);
 	grid->addWidget(pwm_freq, 5, 7, 1, 2);
@@ -145,6 +138,8 @@ void PWM_Control::create_pwm_ctrl()
 		dzone, SLOT(setEnabled(bool)));
 	connect(start, SIGNAL(clicked()),
 		this, SLOT(start_clicked()));
+	connect(single_rq, SIGNAL(clicked()),
+		this, SLOT(single_slicked()));
 }
 
 /*!
@@ -266,5 +261,11 @@ void PWM_Control::send_pwm_request()
 	paket.period = tim_period;
 	paket.duty = pwm_duty;
 
-	spi_ptcl->setPWM_Params(paket);
+//	spi_ptcl->setPWM_Params(paket);
+}
+
+void PWM_Control::single_slicked()
+{
+	send_pwm_request();
+	spi_ptcl->setPWM_Params(&paket);
 }
