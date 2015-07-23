@@ -46,7 +46,12 @@ void Window::createWindow()
 	ADC2_control = new AnalogControl(this);
 	single_transfer_btn = new QPushButton("send", this);
 	ch_display = new CharacterDisplay(this);
-	pwmctrl = new PWM_Control(this);
+	pwm_group = new QGroupBox("PWM Control", this);
+	pwm_grid = new QGridLayout(pwm_group);
+	pwmctrl = new PWM_Control(pwm_group);
+
+	pwm_grid->addWidget(pwmctrl);
+	pwm_group->setLayout(pwm_grid);
 
 	setFont(QFont("Monospace", 10, -1, false));
 	setLayout(grid);
@@ -72,7 +77,7 @@ void Window::createWindow()
 	grid->addWidget(single_transfer_btn, 3, 2);
 	grid->addWidget(spi_data_label, 5, 0, 1, 3);
 
-	grid->addWidget(pwmctrl, 0, 3, 5, 1);
+	grid->addWidget(pwm_group, 0, 3, 6, 1);
 
 	adjustSize();
 	setFixedSize(this->size());

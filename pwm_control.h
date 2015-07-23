@@ -45,6 +45,13 @@ private:
 
 	QCheckBox * ngen;
 
+	QLabel * tick_time;			//!< Значение одного тика таймера, мкс.
+	QLabel * tick_freq;
+	QLabel * pwm_period;		//!< Период ШИМ
+	QLabel * pwm_freq;			//!< Частота ШИМ
+	QLabel * pwm_pulse_time;	//!< Длительность импульса
+	QLabel * pwm_dzone_time;
+
 	void create_pwm_ctrl(void);
 
 

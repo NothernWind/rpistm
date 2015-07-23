@@ -65,6 +65,9 @@ private:
 	AnalogControl * ADC2_control;
 	QPushButton * single_transfer_btn;
 	CharacterDisplay * ch_display;
+
+	QGroupBox * pwm_group;
+	QGridLayout * pwm_grid;
 	PWM_Control * pwmctrl;
 	QTimer * timer;
 
