@@ -28,7 +28,7 @@ void MotorControl::create_mc() {
 	grid->addWidget(RunButton, 1, 0, 1, 3);
 
 	grid->addWidget(PWM_CH1P, 2, 0);
-	grid->addWidget(PWM_CH2P, 2, 2);
+	grid->addWidget(PWM_CH2P, 2, 1);
 	grid->addWidget(PWM_CH3P, 2, 2);
 
 	grid->addWidget(PWM_CH1N, 3, 0);
