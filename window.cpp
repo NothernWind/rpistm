@@ -37,13 +37,22 @@ Window::~Window(){}
  */
 void Window::createWindow()
 {
+	printf("setfont\n");
+
 	setFont(QFont("Monospace", 10, -1, false));
 	setLayout(grid);
 
+	printf("create grid\n");
+
 	grid = new QGridLayout(this);
 
+	printf("led box\n");
 	add_LedBox();
+
+	printf("create lcd\n");
 	add_LCD();
+
+	printf("Analog\n");
 	add_AnalogControl();
 //	add_PWM_Control();
 
@@ -90,11 +99,10 @@ void Window::initilizeSystem()
 
 void Window::add_AnalogControl()
 {
-	spi_start_btn = new QPushButton("start", this);
-
 	ADC1_control = new AnalogControl(this);
 	ADC2_control = new AnalogControl(this);
 
+	spi_start_btn = new QPushButton("start", this);
 	single_transfer_btn = new QPushButton("send", this);
 
 	ADC1_control->setRange(0, 5000.000);
