@@ -45,7 +45,7 @@ void Window::createWindow()
 	add_LedBox();
 	add_LCD();
 	add_AnalogControl();
-	add_PWM_Control();
+//	add_PWM_Control();
 
 	adjustSize();
 	setFixedSize(this->size());
