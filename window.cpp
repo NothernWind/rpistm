@@ -37,24 +37,15 @@ Window::~Window(){}
  */
 void Window::createWindow()
 {
-	printf("setfont\n");
-
 	setFont(QFont("Monospace", 10, -1, false));
-	setLayout(grid);
-
-	printf("create grid\n");
 
 	grid = new QGridLayout(this);
+	setLayout(grid);
 
-	printf("led box\n");
 	add_LedBox();
-
-	printf("create lcd\n");
 	add_LCD();
-
-	printf("Analog\n");
 	add_AnalogControl();
-//	add_PWM_Control();
+	add_PWM_Control();
 
 	adjustSize();
 	setFixedSize(this->size());
