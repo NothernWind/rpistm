@@ -273,14 +273,12 @@ void PWM_Control::send_pwm_request()
 void PWM_Control::single_slicked()
 {
 	send_pwm_request();
-//	spi_ptcl->setPWM_Params(&paket);
 }
 
 void PWM_Control::timer_update()
 {
 	if (start_state == true) {
 		send_pwm_request();
-//		spi_ptcl->setPWM_Params(&paket);
 		timer->start(20);
 	}
 }

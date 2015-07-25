@@ -37,47 +37,15 @@ Window::~Window(){}
  */
 void Window::createWindow()
 {
-	grid = new QGridLayout(this);
-
-	led_box = new QCheckBox("LED", this);
-	spi_start_btn = new QPushButton("start", this);
-	spi_data_label = new QLabel(this);
-	ADC1_control = new AnalogControl(this);
-	ADC2_control = new AnalogControl(this);
-	single_transfer_btn = new QPushButton("send", this);
-	ch_display = new CharacterDisplay(this);
-	pwm_group = new QGroupBox("PWM Control", this);
-	pwm_grid = new QGridLayout(pwm_group);
-	pwmctrl = new PWM_Control(pwm_group);
-
-	pwm_grid->addWidget(pwmctrl);
-	pwm_group->setLayout(pwm_grid);
-
 	setFont(QFont("Monospace", 10, -1, false));
 	setLayout(grid);
 
-	ADC1_control->setRange(0, 5000.000);
-	ADC1_control->setTitle("ADC1");
+	grid = new QGridLayout(this);
 
-	ADC2_control->setRange(0, 5000.000);
-	ADC2_control->setTitle("ADC2");
-
-	led_box->setDisabled(true);
-	spi_start_btn->setDisabled(true);
-	single_transfer_btn->setDisabled(true);
-
-	ch_display->write_string("Test SPI Device                 ");
-
-	grid->addWidget(ch_display, 0, 0, 1, 3);
-	grid->addWidget(ADC1_control, 1, 0, 4, 1);
-	grid->addWidget(ADC2_control, 1, 1, 4, 1);
-
-	grid->addWidget(led_box, 1, 2);
-	grid->addWidget(spi_start_btn, 2, 2);
-	grid->addWidget(single_transfer_btn, 3, 2);
-	grid->addWidget(spi_data_label, 5, 0, 1, 3);
-
-	grid->addWidget(pwm_group, 0, 3, 6, 1);
+	add_LedBox();
+	add_LCD();
+	add_AnalogControl();
+	add_PWM_Control();
 
 	adjustSize();
 	setFixedSize(this->size());
@@ -118,6 +86,70 @@ void Window::initilizeSystem()
 	connect(timer, SIGNAL(timeout()),
 		this, SLOT(continuous_transfer()));
 
+}
+
+void Window::add_AnalogControl()
+{
+	spi_start_btn = new QPushButton("start", this);
+
+	ADC1_control = new AnalogControl(this);
+	ADC2_control = new AnalogControl(this);
+
+	single_transfer_btn = new QPushButton("send", this);
+
+	ADC1_control->setRange(0, 5000.000);
+	ADC1_control->setTitle("ADC1");
+
+	ADC2_control->setRange(0, 5000.000);
+	ADC2_control->setTitle("ADC2");
+
+	spi_start_btn->setDisabled(true);
+	single_transfer_btn->setDisabled(true);
+
+
+	grid->addWidget(ADC1_control, 1, 0, 4, 1);
+	grid->addWidget(ADC2_control, 1, 1, 4, 1);
+
+	grid->addWidget(spi_start_btn, 2, 2);
+	grid->addWidget(single_transfer_btn, 3, 2);
+
+
+}
+
+#define MOTOR_CTRL
+
+void Window::add_PWM_Control()
+{
+	pwm_group = new QGroupBox("PWM Control", this);
+	pwm_grid = new QGridLayout(pwm_group);
+
+#ifdef MOTOR_CTRL
+	mctrl = new MotorControl(this);
+
+	pwm_grid->addWidget(mctrl, 0, 0);
+	pwm_group->setLayout(pwm_grid);
+#else
+	pwmctrl = new PWM_Control(pwm_group);
+
+	pwm_grid->addWidget(pwmctrl, 0, 0);
+	pwm_group->setLayout(pwm_grid);
+#endif
+
+	grid->addWidget(pwm_group, 0, 3, 6, 1);
+}
+
+void Window::add_LCD()
+{
+	ch_display = new CharacterDisplay(this);
+	ch_display->write_string("Test SPI Device                 ");
+	grid->addWidget(ch_display, 0, 0, 1, 3);
+}
+
+void Window::add_LedBox()
+{
+	led_box = new QCheckBox("LED", this);
+	led_box->setDisabled(true);
+	grid->addWidget(led_box, 1, 2);
 }
 
 /*!

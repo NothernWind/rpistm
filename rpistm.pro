@@ -7,7 +7,8 @@ HEADERS += \
     characterdisplay.h \
     spi_protocol.h \
     qvextslider.h \
-    pwm_control.h
+    pwm_control.h \
+    motorcontrol.h
 
 SOURCES += \
     window.cpp \
@@ -18,9 +19,10 @@ SOURCES += \
     analogcontrol.cpp \
     characterdisplay.cpp \
     spi_protocol.cpp \
-    pwm_control.cpp
+    pwm_control.cpp \
+    motorcontrol.cpp
 
 win32 {
 	QT += widgets
-	error("Can't build this project on win32")
+	#error("Can't build this project on win32")
 }

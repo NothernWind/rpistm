@@ -26,8 +26,11 @@
 #include "characterdisplay.h"
 #include "qvextslider.h"
 #include "pwm_control.h"
+#include "motorcontrol.h"
 
 #include "spi_protocol.h"
+
+
 
 class ADC_Dial;
 
@@ -69,12 +72,19 @@ private:
 	QGroupBox * pwm_group;
 	QGridLayout * pwm_grid;
 	PWM_Control * pwmctrl;
+
+	MotorControl * mctrl;
+
 	QTimer * timer;
 
 	SPI_Protocol * spi_device;
 
 	void createWindow(void);
 	void initilizeSystem(void);
+	void add_AnalogControl(void);
+	void add_PWM_Control(void);
+	void add_LCD(void);
+	void add_LedBox(void);
 
 };
 
