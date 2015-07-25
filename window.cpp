@@ -124,7 +124,7 @@ void Window::add_PWM_Control()
 	pwm_grid = new QGridLayout(pwm_group);
 
 #ifdef MOTOR_CTRL
-	mctrl = new MotorControl(this);
+	mctrl = new MotorControl(pwm_group);
 
 	pwm_grid->addWidget(mctrl, 0, 0);
 	pwm_group->setLayout(pwm_grid);
