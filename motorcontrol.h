@@ -32,6 +32,7 @@ private:
 	QRadioButton * PWM_CH3N;
 
 	void create_mc(void);
+	void init_state_system(void);
 };
 
 #endif // MOTORCONTROL_H

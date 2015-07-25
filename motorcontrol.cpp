@@ -35,4 +35,38 @@ void MotorControl::create_mc() {
 	grid->addWidget(PWM_CH2N, 3, 1);
 	grid->addWidget(PWM_CH3N, 3, 2);
 
+	init_state_system();
+}
+
+void MotorControl::init_state_system()
+{
+	connect(PWM_CH1N, SIGNAL(toggled(bool)),
+		PWM_CH1P, SLOT(setDisabled(bool)));
+
+	connect(PWM_CH1N, SIGNAL(toggled(bool)),
+		PWM_CH2P, SLOT(setEnabled(bool)));
+
+	connect(PWM_CH1N, SIGNAL(toggled(bool)),
+		PWM_CH3P, SLOT(setEnabled(bool)));
+
+
+	connect(PWM_CH2N, SIGNAL(toggled(bool)),
+		PWM_CH2P, SLOT(setDisabled(bool)));
+
+	connect(PWM_CH2N, SIGNAL(toggled(bool)),
+		PWM_CH1P, SLOT(setEnabled(bool)));
+
+	connect(PWM_CH2N, SIGNAL(toggled(bool)),
+		PWM_CH3P, SLOT(setEnabled(bool)));
+
+
+	connect(PWM_CH3N, SIGNAL(toggled(bool)),
+		PWM_CH3P, SLOT(setDisabled(bool)));
+
+	connect(PWM_CH3N, SIGNAL(toggled(bool)),
+		PWM_CH1P, SLOT(setEnabled(bool)));
+
+	connect(PWM_CH3N, SIGNAL(toggled(bool)),
+		PWM_CH2P, SLOT(setEnabled(bool)));
+
 }
